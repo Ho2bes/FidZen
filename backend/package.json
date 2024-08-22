@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Ho2bes/FidZen/issues"
   },
-  "homepage": "https://github.com/Ho2bes/FidZen#readme"
+  "homepage": "https://github.com/Ho2bes/FidZen#readme",
+  "dependencies": {
+    "@prisma/client": "^5.18.0",
+    "express": "^4.19.2"
+  }
 }
