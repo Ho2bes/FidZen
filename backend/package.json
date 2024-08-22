@@ -1,0 +1,19 @@
+{
+  "name": "fidzen-backend",
+  "version": "1.0.0",
+  "description": "fidelity apps",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ho2bes/FidZen.git"
+  },
+  "author": "Nicolas B. DOMINGO & Erwan LEBRETON",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ho2bes/FidZen/issues"
+  },
+  "homepage": "https://github.com/Ho2bes/FidZen#readme"
+}
