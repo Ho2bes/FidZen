@@ -62,7 +62,7 @@ FidZen is designed for modern consumers who juggle numerous loyalty cards. Our a
    ```bash
    	cd ../frontend
 	flutter pub get
-	   ```
+	```
 
 4. **Set up Docker environment:**
    ```bash
@@ -102,7 +102,7 @@ FidZen’s architecture follows a layered approach, separating the frontend, bac
 - **Database (PostgreSQL)**: Stores user information, loyalty cards, and receipts.
 - **Notifications (FCM)**: Sends product recall notifications to users.
 
-![Architecture Diagram](https://github.com/Ho2bes/FidZen/blob/develop/image/Architecture%20Fi)
+![Architecture FidZen](https://github.com/Ho2bes/FidZen/blob/develop/image/Architecture%20Fi)
 
 ## Contributors
 
@@ -116,5 +116,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For questions or suggestions, please contact the development team at:
-[Nicolas Brault Domingo](https://www.linkedin.com/in/nicolas-b-d/)
+[Nicolas Brault Domingo](https://www.linkedin.com/in/nicolas-b-d/) //
 [Erwan Lebreton](https://www.linkedin.com/in/erwan-lebreton-336aa8203/)
