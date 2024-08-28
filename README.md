@@ -102,7 +102,7 @@ FidZen’s architecture follows a layered approach, separating the frontend, bac
 - **Database (PostgreSQL)**: Stores user information, loyalty cards, and receipts.
 - **Notifications (FCM)**: Sends product recall notifications to users.
 
-![Architecture FidZen](https://github.com/Ho2bes/FidZen/blob/develop/image/Architecture%20Fi)
+![Architecture FidZen](https://github.com/Ho2bes/FidZen/blob/develop/image/Architecture%20FidZen.png)
 
 ## Contributors
 
