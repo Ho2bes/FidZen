@@ -4,11 +4,70 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") // URL de connexion à votre base de données PostgreSQL
 }
 
-model users {
-  id    Int     @id @default(autoincrement())
-  name  String? @db.VarChar(100)
-  email String  @unique @db.VarChar(100)
+model User {
+  id             String   @id @default(uuid()) // UUID pour un identifiant unique
+  email          String   @unique
+  password       String
+  name           String
+  creationDate   DateTime @default(now())
+  lastConnect    DateTime?
+
+  fidelityCards  FidelityCard[] // Relation avec les cartes de fidélité
+  receipts       Receipt[]      @relation("UserReceipts") // Relation avec les tickets de caisse
+}
+
+model FidelityCard {
+  id         String  @id @default(uuid())
+  userId     String
+  storeName  String
+  cardNumber String
+  dateAdd    DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id]) // Relation avec l'utilisateur
+  receipts   Receipt[] // Relation avec les tickets de caisse
+}
+
+model Receipt {
+  id             String   @id @default(uuid())
+  fidelityCardId String
+  purchaseDate   DateTime @default(now())
+  totalCost      Float
+  purchaseDetails String
+
+  fidelityCard  FidelityCard @relation(fields: [fidelityCardId], references: [id], map: "Receipt_fidelityCard_relation") // Utilisation de `map` pour un nom unique de contrainte
+  products      Product[]     // Relation avec les produits
+  user          User?         @relation("UserReceipts", fields: [fidelityCardId], references: [id]) // Relation inverse avec User
+}
+
+model Product {
+  id             String  @id @default(uuid())
+  receiptId      String
+  productName    String
+  codeProduct    String
+  price          Float
+  quantity       Int
+
+  receipt        Receipt @relation(fields: [receiptId], references: [id]) // Relation avec le ticket de caisse
+  productRecalls Product_ProductRecall[] @relation("ProductToRecall") // Relation avec la table de jointure pour les rappels produits
+}
+
+model ProductRecall {
+  id          String  @id @default(uuid())
+  codeProduct String  @unique
+  recallDate  DateTime
+  recallReason String
+
+  productRecalls Product_ProductRecall[] @relation("RecallToProduct") // Relation avec la table de jointure pour les produits
+}
+
+model Product_ProductRecall {
+  id              String         @id @default(uuid())
+  productId       String
+  productRecallId String
+
+  product         Product        @relation(name: "ProductToRecall", fields: [productId], references: [id], map: "Product_Product_relation") // Relation nommée explicitement
+  productRecall   ProductRecall  @relation(name: "RecallToProduct", fields: [productRecallId], references: [id], map: "ProductRecall_Product_relation") // Relation nommée explicitement
 }

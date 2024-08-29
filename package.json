@@ -1,0 +1,15 @@
+{
+  "name": "fidzen",
+  "version": "1.0.0",
+  "description": "![FidZen Logo](https://github.com/Ho2bes/FidZen/blob/develop/image/LOGO%20FIDZEN.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^5.19.0"
+  }
+}
