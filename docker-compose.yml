@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./fidzen_front
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
