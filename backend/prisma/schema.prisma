@@ -1,76 +1,90 @@
 // schema.prisma
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id             String          @id @default(uuid())
-  email          String          @unique
-  password       String
-  name           String
-  creationDate   DateTime        @default(now())
-  lastConnect    DateTime?
-
-  fidelityCards  FidelityCard[]  // Relation avec les cartes de fidélité
-  receipts       Receipt[]       @relation("UserReceipts") // Relation avec les tickets de caisse
+generator client {
+  provider = "prisma-client-js"
 }
 
-model FidelityCard {
-  id         String       @id @default(uuid())
-  userId     String
-  storeName  String
-  cardNumber String
-  dateAdd    DateTime     @default(now())
+model User {
+  id             String       @id @default(uuid())
+  email          String       @unique
+  password       String
+  roles          Role[]       @relation("UserRoles")
+  notifications  Notification[]
+  loyaltyCards   LoyaltyCard[]
+  auditLogs      AuditLog[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
 
-  user       User         @relation(fields: [userId], references: [id]) // Relation avec l'utilisateur
-  receipts   Receipt[]    // Relation avec les tickets de caisse
+model Role {
+  id          String    @id @default(uuid())
+  name        String
+  permissions String[]
+  users       User[]    @relation("UserRoles")
+}
+
+model Notification {
+  id             String         @id @default(uuid())
+  userId         String
+  message        String
+  createdAt      DateTime        @default(now())
+  productRecallId String?
+  user           User            @relation(fields: [userId], references: [id])
+  productRecall  ProductRecall?  @relation(fields: [productRecallId], references: [id])
+}
+
+model LoyaltyCard {
+  id          String      @id @default(uuid())
+  userId      String
+  cardNumber  String
+  storeName   String
+  receipts    Receipt[]
+  user        User        @relation(fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
 
 model Receipt {
-  id             String   @id @default(uuid())
-  fidelityCardId String
-  userId         String?  // Ajouté pour la relation avec User
-  purchaseDate   DateTime @default(now())
-  totalCost      Float
-  purchaseDetails String
-
-  fidelityCard   FidelityCard @relation(fields: [fidelityCardId], references: [id], map: "Receipt_fidelityCard_relation") // Relation avec la carte de fidélité
-  products       Product[]    // Relation avec les produits achetés
-  user           User?        @relation("UserReceipts", fields: [userId], references: [id]) // Relation opposée avec User
+  id            String      @id @default(uuid())
+  loyaltyCardId String
+  purchaseDate  DateTime
+  totalAmount   Float
+  products      Product[]
+  loyaltyCard   LoyaltyCard @relation(fields: [loyaltyCardId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Product {
-  id             String  @id @default(uuid())
-  receiptId      String?
-  productName    String
-  codeProduct    String
-  price          Float
-  quantity       Int
-
-  receipt        Receipt? @relation(fields: [receiptId], references: [id]) // Relation avec le ticket de caisse
-  productRecalls Product_ProductRecall[] // Relation avec les rappels produits
+  id            String         @id @default(uuid())
+  receiptId     String
+  name          String
+  code          String
+  price         Float
+  receipt       Receipt        @relation(fields: [receiptId], references: [id])
+  productRecall ProductRecall?
 }
 
 model ProductRecall {
-  id          String  @id @default(uuid())
-  codeProduct String  @unique
-  recallDate  DateTime
-  recallReason String
-
-  productRecalls Product_ProductRecall[] // Relation avec la table de jointure pour les produits
+  id            String         @id @default(uuid())
+  productId     String         @unique
+  recallDate    DateTime
+  description   String
+  notifications Notification[]
+  product       Product        @relation(fields: [productId], references: [id])
 }
 
-model Product_ProductRecall {
-  id              String         @id @default(uuid())
-  productId       String
-  productRecallId String
-
-  product         Product        @relation(fields: [productId], references: [id], map: "ProductRecall_Product_relation")
-  productRecall   ProductRecall  @relation(fields: [productRecallId], references: [id], map: "ProductRecall_ProductRecall_relation")
+model AuditLog {
+  id            String       @id @default(uuid())
+  userId        String
+  action        String
+  entityId      String
+  entityType    String
+  timestamp     DateTime     @default(now())
+  user          User         @relation(fields: [userId], references: [id])
 }
