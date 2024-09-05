@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444016428971",
+    "project_id": "fidzen-nbdel",
+    "storage_bucket": "fidzen-nbdel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444016428971:android:70e888ef74503af103b4ee",
+        "android_client_info": {
+          "package_name": "com.NBDEL.FidZen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOBZJbvWWIwDxX1fysNSmO1W8BynD2cVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
