@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Ho2bes/FidZen#readme",
   "dependencies": {
     "@prisma/client": "^5.19.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2"
   },
   "devDependencies": {
