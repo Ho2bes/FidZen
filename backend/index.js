@@ -30,8 +30,8 @@ async function main() {
     // Créer un nouvel utilisateur
     const utilisateur = await prisma.user.create({
       data: {
-        email: 'newuser@example.com',  // Email à tester
-        password: 'mysecurepassword',
+        email: 'newuser2@example.com',  // Email à tester
+        password: 'mysecurepassword2',
       },
     });
 
