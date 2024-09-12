@@ -3,41 +3,22 @@ name: CI Pipeline
 on:
   push:
     branches:
-      - main
+      - develop
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    services:
-      mongo:
-        image: mongo:6.0
-        ports:
-          - 27017:27017
-      postgres:
-        image: postgres:latest
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: fidzen
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3  # Mettre à jour vers v3
 
-      - name: Set up Docker Compose
-        run: |
-          docker-compose -f docker-compose.yml up -d
-
-      - name: Wait for Services to be Ready
-        run: |
-          # Attendre que les services soient prêts
-          sleep 15
+      - name: Set up Node.js
+        uses: actions/setup-node@v3  # Mettre à jour vers v3
+        with:
+          node-version: '20'  # Utilisez la version Node.js 20
 
       - name: Install Backend Dependencies
         run: |
@@ -51,13 +32,12 @@ jobs:
 
       - name: Install Frontend Dependencies
         run: |
-          cd frontend
-          npm install
+          cd fidzen_front
           flutter pub get
 
       - name: Run Frontend Tests
         run: |
-          cd frontend
+          cd fidzen_front
           flutter test
 
   deploy:
@@ -67,4 +47,4 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to Production..."
-          # Ajoutez ici les commandes de déploiement (Heroku, Firebase, etc.)
+          # Ajoutez ici votre commande de déploiement
