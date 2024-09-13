@@ -1,6 +1,5 @@
 require('dotenv').config({ path: './.env' }); // Charger dotenv avec le bon chemin
 
-// Vérifiez si la variable est correctement chargée
 console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
 const express = require('express');
@@ -21,52 +20,54 @@ mongoose.connect(mongoURI)
 // Middleware pour parser le JSON
 app.use(express.json());
 
-// Importer Prisma pour PostgreSQL
+// Initialiser Prisma pour PostgreSQL
 const prisma = new PrismaClient();
-
-// Utiliser le modèle `User` défini dans Prisma
-async function main() {
-  try {
-    // Créer un nouvel utilisateur
-    const utilisateur = await prisma.user.create({
-      data: {
-        email: 'newuser2@example.com',  // Email à tester
-        password: 'mysecurepassword2',
-      },
-    });
-
-    console.log(utilisateur);
-
-  } catch (error) {
-    if (error.code === 'P2002' && error.meta.target.includes('email')) {
-      console.error('Erreur: Cet email est déjà utilisé.');
-    } else {
-      console.error('Une erreur est survenue:', error);
-    }
-  }
-}
-
-main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
-
-// Importer les routes MongoDB
-const logRoutes = require('./routes/logs'); // Route pour les logs d'activité
-const notificationRoutes = require('./routes/notifications'); // Route pour les notifications
-
-// Utiliser les routes MongoDB
-app.use('/api', logRoutes);
-app.use('/api', notificationRoutes);
 
 // Route par défaut pour la racine "/"
 app.get('/', (req, res) => {
   res.send('Bienvenue sur le serveur FidZen');
 });
+
+// Routes Prisma pour gérer les utilisateurs
+const userRoutes = require('./routes/users');
+app.use('/api/users', userRoutes); // Utiliser les routes définies dans users.js
+
+// Importer et utiliser les routes des autres API
+const authRoutes = require('./routes/auth');
+const cardRoutes = require('./routes/cards');
+const receiptRoutes = require('./routes/receipts');
+const productRoutes = require('./routes/products');
+const logRoutes = require('./routes/logs');
+const notificationRoutes = require('./routes/notifications');
+
+app.use('/api/auth', authRoutes); // Routes pour l'authentification et la gestion des utilisateurs
+app.use('/api/cards', cardRoutes); // Routes pour la gestion des cartes de fidélité
+app.use('/api/receipts', receiptRoutes); // Routes pour la gestion des reçus
+app.use('/api/products', productRoutes); // Routes pour la gestion des produits
+app.use('/api/logs', logRoutes); // Routes MongoDB pour les logs
+app.use('/api/notifications', notificationRoutes); // Routes MongoDB pour les notifications
+
+// Fonction de test pour vérifier si l'utilisateur est récupéré correctement
+async function testUserRetrieval() {
+  const testUserId = "votre_id_utilisateur"; // Remplacez par l'ID que vous avez reçu
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: testUserId },
+    });
+
+    if (!user) {
+      console.log('Utilisateur non trouvé.');
+    } else {
+      console.log('Utilisateur trouvé:', user);
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l’utilisateur:', error.message);
+  }
+}
+
+// Appeler la fonction de test
+// Vous pouvez commenter ceci après l'avoir testé
+testUserRetrieval();
 
 // Démarrer le serveur
 app.listen(3000, () => {
