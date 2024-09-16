@@ -1,22 +1,73 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.0' // Compatible avec Gradle 7.2
+        classpath 'com.google.gms:google-services:4.4.2' // Google Services
+    }
+}
+
+plugins {
+    id 'com.github.node-gradle.node' version '3.1.0' // Placez le bloc plugins après buildscript
+}
+
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
-     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0' // Assurez-vous que cette version est compatible avec Flutter
-        classpath 'com.google.gms:google-services:4.4.2' // Ajoutez cette ligne pour Google Services
-    }
 }
 
 rootProject.buildDir = "../build"
+
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
+
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 33 // Mettez à jour selon vos besoins
+                buildToolsVersion "33.0.0" // Version des outils de construction
+
+                defaultConfig {
+                    applicationId "com.fidzen.app" // Remplacez par l'ID de votre application
+                    minSdkVersion 21 // Version minimale du SDK Android
+                    targetSdkVersion 33 // Version cible du SDK Android
+                    versionCode 1
+                    versionName "1.0.0"
+                }
+
+                buildTypes {
+                    release {
+                        minifyEnabled false
+                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                    }
+                }
+            }
+        }
+    }
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+
+// Ajout de tâches spécifiques pour Node.js (si nécessaire)
+node {
+    version = '14.17.0' // La version de Node.js que vous souhaitez utiliser
+    npmVersion = '6.14.13' // La version de npm que vous souhaitez utiliser
+    download = true // Pour télécharger automatiquement Node.js
+}
+
+task installDependencies(type: NpmTask) {
+    args = ['install']
+}
+
+task startServer(type: NpmTask) {
+    args = ['run', 'start']
+}
+
+startServer.dependsOn installDependencies
