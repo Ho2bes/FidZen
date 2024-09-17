@@ -4,7 +4,7 @@
   "description": "fidelity apps",
   "main": "app.js",
   "scripts": {
-    "test": "jest --testPathPattern=../tests"
+    "test": "jest ../tests/**/*.test.js"
   },
   "repository": {
     "type": "git",
