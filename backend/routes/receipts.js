@@ -1,4 +1,3 @@
-// receipts.js
 const express = require('express');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
@@ -18,13 +17,15 @@ router.get('/', async (req, res) => {
 
 // Route pour ajouter un nouveau reçu
 router.post('/', async (req, res) => {
-  const { purchaseDetails, date } = req.body;
+  const { userId, cardId, purchaseDate, totalAmount } = req.body; // Extraire les champs nécessaires de la requête
 
   try {
     const newReceipt = await prisma.receipt.create({
       data: {
-        purchaseDetails,
-        date,
+        userId, // Assurez-vous que ces champs existent dans votre modèle Prisma
+        cardId,
+        purchaseDate: new Date(purchaseDate), // Assurez-vous de passer une date valide
+        totalAmount,
       },
     });
     res.status(201).json(newReceipt);

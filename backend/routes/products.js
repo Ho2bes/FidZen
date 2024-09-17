@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 
 // Route pour ajouter un nouveau produit
 router.post('/', async (req, res) => {
-  const { name, code, price } = req.body;
+  const { name, code, price, receiptId } = req.body; // Ajoute `receiptId` à la requête
 
   try {
     const newProduct = await prisma.product.create({
@@ -26,6 +26,9 @@ router.post('/', async (req, res) => {
         name,
         code,
         price,
+        receipt: {
+          connect: { id: receiptId }, // Connexion au reçu existant via son ID
+        },
       },
     });
     res.status(201).json(newProduct);

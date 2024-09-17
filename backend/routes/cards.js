@@ -18,13 +18,16 @@ router.get('/', async (req, res) => {
 
 // Route pour ajouter une nouvelle carte de fidélité
 router.post('/', async (req, res) => {
-  const { cardNumber, storeName } = req.body;
+  const { cardNumber, storeName, userId } = req.body; // Assurez-vous que userId est inclus dans la requête
 
   try {
     const newCard = await prisma.loyaltyCard.create({
       data: {
         cardNumber,
         storeName,
+        user: {
+          connect: { id: userId } // Connecte la carte de fidélité à l'utilisateur existant par son ID
+        },
       },
     });
     res.status(201).json(newCard);
