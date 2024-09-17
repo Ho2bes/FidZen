@@ -1,12 +1,14 @@
 const request = require('supertest');
-const app = require('../backend/index');
+const app = require('../index'); // Correction pour le chemin vers index.js
 
 describe('Products API', () => {
   test('GET /api/products - should retrieve all products', async () => {
-    const response = await request(app).get('/api/products');
-    expect(response.statusCode).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
+    const res = await request(app).get('/api/products');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeInstanceOf(Array);
   });
+});
+
 
   test('POST /api/products - should add a new product', async () => {
     const response = await request(app)
@@ -33,4 +35,3 @@ describe('Products API', () => {
     const response = await request(app).delete('/api/products/1');
     expect(response.statusCode).toBe(204);
   });
-});

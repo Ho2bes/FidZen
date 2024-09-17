@@ -1,11 +1,18 @@
 const request = require('supertest');
-const app = require('../index'); // Remplace par le chemin vers ton fichier app.js
-const prisma = require('../prismaClient'); // Remplace par le chemin vers ton fichier Prisma Client
+const app = require('../index'); // Correction pour le chemin vers index.js
+const prisma = require('../prisma'); // Correction du chemin vers prismaClient.js
 
 describe('Prisma Notifications API', () => {
   afterAll(async () => {
-    await prisma.notification.deleteMany(); // Nettoie les données après les tests
+    await prisma.$disconnect(); // Fermeture de la connexion Prisma
   });
+
+  it('should retrieve notifications', async () => {
+    const res = await request(app).get('/api/notifications');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeInstanceOf(Array);
+  });
+});
 
   it('should create a new notification using Prisma', async () => {
     const res = await request(app)
@@ -36,4 +43,4 @@ describe('Prisma Notifications API', () => {
     const res = await request(app).delete(`/api/prisma/notifications/${notification.id}`);
     expect(res.statusCode).toEqual(200);
   });
-});
+

@@ -1,7 +1,17 @@
 const request = require('supertest');
-const app = require('../index'); // Remplace par le chemin vers ton fichier app.js
+const app = require('../index'); // Correction pour le chemin vers index.js
 
 describe('Product Recalls API', () => {
+  let server;
+
+  beforeAll(() => {
+    server = app.listen(3000);
+  });
+
+  afterAll(() => {
+    server.close();
+  });
+
   it('should retrieve all product recalls', async () => {
     const res = await request(app).get('/api/product-recalls');
     expect(res.statusCode).toEqual(200);
@@ -12,7 +22,7 @@ describe('Product Recalls API', () => {
     const res = await request(app)
       .post('/api/product-recalls')
       .send({
-        productName: 'Product 1',
+        productId: '123456',
         recallReason: 'Safety Issue'
       });
     expect(res.statusCode).toEqual(201);
