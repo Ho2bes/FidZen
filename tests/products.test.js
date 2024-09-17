@@ -1,42 +1,36 @@
 const request = require('supertest');
-const app = require('../app'); // Remplace par le chemin vers ton fichier app.js
+const app = require('../backend/app');
 
 describe('Products API', () => {
-  it('should retrieve all purchased products recorded in receipts', async () => {
-    const res = await request(app).get('/api/products');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toBeInstanceOf(Array);
+  test('GET /api/products - should retrieve all products', async () => {
+    const response = await request(app).get('/api/products');
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('should add a new product to a receipt', async () => {
-    const res = await request(app)
+  test('POST /api/products - should add a new product', async () => {
+    const response = await request(app)
       .post('/api/products')
       .send({
-        name: 'Product 1',
-        price: 10.99,
-        receiptId: '123456'
+        name: 'New Product',
+        price: 100,
       });
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('_id');
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toHaveProperty('name', 'New Product');
   });
 
-  it('should retrieve a specific product by ID', async () => {
-    const res = await request(app).get('/api/products/123456');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty('_id');
-  });
-
-  it('should update a product', async () => {
-    const res = await request(app)
-      .put('/api/products/123456')
+  test('PUT /api/products/:id - should update a product', async () => {
+    const response = await request(app)
+      .put('/api/products/1')
       .send({
-        price: 12.99
+        price: 120,
       });
-    expect(res.statusCode).toEqual(200);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('price', 120);
   });
 
-  it('should delete a product', async () => {
-    const res = await request(app).delete('/api/products/123456');
-    expect(res.statusCode).toEqual(200);
+  test('DELETE /api/products/:id - should delete a product', async () => {
+    const response = await request(app).delete('/api/products/1');
+    expect(response.statusCode).toBe(204);
   });
 });

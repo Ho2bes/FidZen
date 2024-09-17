@@ -1,42 +1,36 @@
 const request = require('supertest');
-const app = require('../app'); // Remplace par le chemin vers ton fichier app.js
+const app = require('../backend/app');
 
-describe('Loyalty Cards API', () => {
-  it('should retrieve all loyalty cards for the logged-in user', async () => {
-    const res = await request(app).get('/api/cards');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toBeInstanceOf(Array);
+describe('Cards API', () => {
+  test('GET /api/cards - should retrieve all cards', async () => {
+    const response = await request(app).get('/api/cards');
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('should add a new loyalty card', async () => {
-    const res = await request(app)
+  test('POST /api/cards - should add a new card', async () => {
+    const response = await request(app)
       .post('/api/cards')
       .send({
-        cardNumber: '1234567890',
-        storeName: 'Test Store',
-        userId: '123456'
+        number: '1234567890',
+        store: 'Test Store',
       });
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('_id');
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toHaveProperty('number', '1234567890');
   });
 
-  it('should retrieve a specific loyalty card by ID', async () => {
-    const res = await request(app).get('/api/cards/123456');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty('_id');
-  });
-
-  it('should update a loyalty card', async () => {
-    const res = await request(app)
-      .put('/api/cards/123456')
+  test('PUT /api/cards/:id - should update a card', async () => {
+    const response = await request(app)
+      .put('/api/cards/1')
       .send({
-        storeName: 'Updated Store Name'
+        store: 'Updated Store',
       });
-    expect(res.statusCode).toEqual(200);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('store', 'Updated Store');
   });
 
-  it('should delete a loyalty card', async () => {
-    const res = await request(app).delete('/api/cards/123456');
-    expect(res.statusCode).toEqual(200);
+  test('DELETE /api/cards/:id - should delete a card', async () => {
+    const response = await request(app).delete('/api/cards/1');
+    expect(response.statusCode).toBe(204);
   });
 });

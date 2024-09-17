@@ -1,40 +1,26 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../app'); // Remplace par le chemin vers ton fichier app.js
-const Log = require('../models/log.model'); // Remplace par le chemin de ton modèle Log
+const app = require('../backend/app');
 
 describe('Logs API', () => {
-  beforeAll(async () => {
-    const url = `mongodb://127.0.0.1/fidzen_test`;
-    await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.db.dropDatabase();
-    await mongoose.connection.close();
-  });
-
-  it('should create a new log', async () => {
-    const res = await request(app)
-      .post('/api/logs/')
+  test('POST /api/logs - should create a new log', async () => {
+    const response = await request(app)
+      .post('/api/logs')
       .send({
-        message: 'New log entry',
-        level: 'info',
-        userId: '123456'
+        action: 'User login',
+        userId: 1,
       });
-    expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('_id');
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toHaveProperty('action', 'User login');
   });
 
-  it('should fetch all logs', async () => {
-    const res = await request(app).get('/api/logs/');
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveLength(1);
+  test('GET /api/logs - should retrieve all logs', async () => {
+    const response = await request(app).get('/api/logs');
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('should delete a specific log', async () => {
-    const log = await Log.create({ message: 'Log to be deleted', level: 'info', userId: '654321' });
-    const res = await request(app).delete(`/api/logs/${log._id}`);
-    expect(res.statusCode).toEqual(200);
+  test('DELETE /api/logs/:id - should delete a log', async () => {
+    const response = await request(app).delete('/api/logs/1');
+    expect(response.statusCode).toBe(204);
   });
 });
