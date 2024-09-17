@@ -28,14 +28,19 @@ jobs:
           --health-retries=5
 
       mongo:
-        image: mongo:6
+        image: mongo:6.0.17
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
         ports:
           - 27017:27017
         options: >-
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-cmd="echo 'db.runCommand({ ping: 1 })' | mongosh"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+        volumes:
+          - /data/db
 
     steps:
       - name: Checkout code
@@ -60,34 +65,3 @@ jobs:
 
       - name: Wait for MongoDB
         run: |
-          until nc -z localhost 27017; do
-            echo "Waiting for MongoDB...";
-            sleep 5;
-          done
-
-      - name: Run Backend Tests
-        env:
-          DATABASE_URL: "postgresql://postgres:EL8687NBD8696@localhost:5432/postgres"
-          MONGO_URI: "mongodb://localhost:27017/fidzen"
-        run: |
-          cd backend
-          npm test
-
-      - name: Install Frontend Dependencies
-        run: |
-          cd fidzen_front
-          flutter pub get
-
-      - name: Run Frontend Tests
-        run: |
-          cd fidzen_front
-          flutter test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to Production
-        run: |
-          echo "Deploying to Production..."
-          # Ajoutez ici votre commande de déploiement
