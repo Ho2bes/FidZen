@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Mettre à jour vers v3
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Mettre à jour vers v3
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Utilisez la version Node.js 20
+          node-version: '20'
 
       - name: Install Backend Dependencies
         run: |
@@ -27,8 +27,8 @@ jobs:
 
       - name: Run Backend Tests
         run: |
-          cd ..
-          npm test  # Reviens à la racine et exécute les tests à la racine
+          cd backend  # Reste dans le dossier backend
+          npm test
 
       - name: Install Frontend Dependencies
         run: |
@@ -47,4 +47,3 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to Production..."
-          # Ajoutez ici votre commande de déploiement
