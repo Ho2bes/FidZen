@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../backend/app');
+const app = require('../backend/index');
 
 describe('Cards API', () => {
   test('GET /api/cards - should retrieve all cards', async () => {

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../backend/app');
+const app = require('../backend/index');
 
 describe('Notifications API', () => {
   test('GET /api/notifications - should retrieve all notifications', async () => {

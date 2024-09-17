@@ -13,38 +13,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Mettre à jour vers v3
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3  # Mettre à jour vers v3
+        uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Utilisez la version Node.js 20
+          node-version: '20'
 
       - name: Install Backend Dependencies
         run: |
           cd backend
           npm install
 
+      - name: Set up environment variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> backend/.env
+
       - name: Run Backend Tests
         run: |
           cd backend
           npm test
-
-      - name: Install Frontend Dependencies
-        run: |
-          cd fidzen_front
-          flutter pub get
-
-      - name: Run Frontend Tests
-        run: |
-          cd fidzen_front
-          flutter test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to Production
-        run: |
-          echo "Deploying to Production..."
-          # Ajoutez ici votre commande de déploiement

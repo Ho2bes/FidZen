@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../backend/app');
+const app = require('../backend/index');
 
 describe('Users API', () => {
   test('GET /api/users/:id - should retrieve user information', async () => {

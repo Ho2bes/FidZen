@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../backend/app');
+const app = require('../backend/index');
 
 describe('Authentication API', () => {
   test('POST /api/auth/register - should register a new user', async () => {
