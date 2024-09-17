@@ -15,12 +15,12 @@ services:
       - fidzen-network
 
   mongo:
-    image: mongo:6
-    ports:
+  image: mongo:6.0.17
+  ports:
       - "27017:27017"
-    volumes:
+  volumes:
       - mongodbdata:/data/db
-    networks:
+  networks:
       - fidzen-network
 
   backend:

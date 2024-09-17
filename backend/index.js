@@ -5,7 +5,7 @@ console.log('DATABASE_URL:', process.env.DATABASE_URL);
 const express = require('express');
 const app = express(); // Initialiser express
 const mongoose = require('mongoose');
-const prisma = require('./prisma/prismaClient'); // Importer le fichier prismaClient.js pour gérer Prisma
+const prisma = require('./prisma/prismaclient'); // Importer le fichier prismaClient.js pour gérer Prisma
 
 // Connexion à MongoDB
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/fidzen';
