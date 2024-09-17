@@ -4,7 +4,7 @@
   "description": "fidelity apps",
   "main": "app.js",
   "scripts": {
-    "test": "jest ../tests/**/*.test.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,9 @@
   "devDependencies": {
     "jest": "^29.0.0",
     "prisma": "^5.19.1"
+  },
+  "jest": {
+    "testMatch": ["<rootDir>/tests/**/*.test.js"],
+    "testPathIgnorePatterns": ["/node_modules/"]
   }
 }

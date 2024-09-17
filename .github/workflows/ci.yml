@@ -28,7 +28,7 @@ jobs:
       - name: Run Backend Tests
         run: |
           cd backend
-          npm test  # Lancement des tests après avoir corrigé le package.json
+          npm test  # Exécute Jest sans spécifier de chemin
 
       - name: Install Frontend Dependencies
         run: |
@@ -47,3 +47,4 @@ jobs:
       - name: Deploy to Production
         run: |
           echo "Deploying to Production..."
+          # Ajouter ici la commande de déploiement
