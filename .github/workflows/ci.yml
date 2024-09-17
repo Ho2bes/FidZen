@@ -27,7 +27,8 @@ jobs:
 
       - name: Run Backend Tests
         run: |
-          npm test
+          cd ..
+          npm test  # Reviens à la racine et exécute les tests à la racine
 
       - name: Install Frontend Dependencies
         run: |
