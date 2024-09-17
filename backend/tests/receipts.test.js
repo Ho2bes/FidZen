@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Remplace par le chemin vers ton fichier app.js
+const app = require('../index'); // Remplace par le chemin vers ton fichier app.js
 
 describe('Receipts API', () => {
   it('should retrieve all receipts linked to loyalty cards', async () => {

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Remplace par le chemin vers ton fichier app.js
+const app = require('../index'); // Remplace par le chemin vers ton fichier app.js
 const prisma = require('../prismaClient'); // Remplace par le chemin vers ton fichier Prisma Client
 
 describe('Prisma Notifications API', () => {
