@@ -11,6 +11,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: EL8687NBD8696
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,11 +51,43 @@ jobs:
           cd backend
           npm install
 
-      - name: Set up environment variables
+      - name: Wait for PostgreSQL
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> backend/.env
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL...";
+            sleep 5;
+          done
+
+      - name: Wait for MongoDB
+        run: |
+          until nc -z localhost 27017; do
+            echo "Waiting for MongoDB...";
+            sleep 5;
+          done
 
       - name: Run Backend Tests
+        env:
+          DATABASE_URL: "postgresql://postgres:EL8687NBD8696@localhost:5432/postgres"
+          MONGO_URI: "mongodb://localhost:27017/fidzen"
         run: |
           cd backend
           npm test
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd fidzen_front
+          flutter pub get
+
+      - name: Run Frontend Tests
+        run: |
+          cd fidzen_front
+          flutter test
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to Production
+        run: |
+          echo "Deploying to Production..."
+          # Ajoutez ici votre commande de déploiement

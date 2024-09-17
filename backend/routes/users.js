@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaclient'); // Importer prisma depuis prismaclient.js
 
 // Créer un utilisateur
 router.post('/', async (req, res) => {
@@ -44,9 +42,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
-
-
 // Mettre à jour un utilisateur
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
@@ -54,7 +49,7 @@ router.put('/:id', async (req, res) => {
 
   try {
     const updatedUser = await prisma.user.update({
-      where: { id: id }, // Suppression de parseInt
+      where: { id: id },
       data: { email, password, name },
     });
 
@@ -71,7 +66,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
     await prisma.user.delete({
-      where: { id: id }, // Suppression de parseInt
+      where: { id: id },
     });
     res.status(204).send();
   } catch (err) {

@@ -18,7 +18,7 @@ model User {
   loyaltyCards  LoyaltyCard[]
   notifications Notification[]
   roles         Role[]         @relation("UserRoles")
-  receipts      Receipt[] // Ajout de cette relation inverse
+  receipts      Receipt[]      // Ajout de la relation inverse avec Receipt
 }
 
 model Role {
@@ -35,7 +35,7 @@ model Notification {
   createdAt       DateTime       @default(now())
   productRecallId String?
   productRecall   ProductRecall? @relation(fields: [productRecallId], references: [id])
-  user            User           @relation(fields: [userId], references: [id])
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model LoyaltyCard {
@@ -45,7 +45,7 @@ model LoyaltyCard {
   storeName  String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  user       User      @relation(fields: [userId], references: [id])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   receipts   Receipt[]
 }
 
@@ -57,10 +57,9 @@ model Receipt {
   totalAmount  Float
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-
-  user     User        @relation(fields: [userId], references: [id])
-  card     LoyaltyCard @relation(fields: [cardId], references: [id])
-  products Product[]
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card         LoyaltyCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  products     Product[]
 }
 
 model Product {
@@ -69,7 +68,7 @@ model Product {
   price         Float
   code          String
   name          String
-  receipt       Receipt        @relation(fields: [receiptId], references: [id])
+  receipt       Receipt        @relation(fields: [receiptId], references: [id], onDelete: Cascade)
   productRecall ProductRecall?
 }
 
@@ -79,7 +78,7 @@ model ProductRecall {
   description   String
   productId     String         @unique
   notifications Notification[]
-  product       Product        @relation(fields: [productId], references: [id])
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model AuditLog {
@@ -89,5 +88,5 @@ model AuditLog {
   entityId   String
   entityType String
   timestamp  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

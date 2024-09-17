@@ -1,9 +1,7 @@
 // auth.js
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaclient'); // Utilisation de prismaclient.js
 
 // Route pour l'enregistrement d'un utilisateur
 router.post('/register', async (req, res) => {

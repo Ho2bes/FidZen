@@ -1,8 +1,8 @@
-/*
-  Warnings:
+-- 1. Ajouter la colonne "name" avec une valeur temporairement nullable
+ALTER TABLE "User" ADD COLUMN "name" TEXT;
 
-  - Added the required column `name` to the `User` table without a default value. This is not possible if the table is not empty.
+-- 2. Mettre à jour les enregistrements existants avec une valeur par défaut (par exemple "Unknown")
+UPDATE "User" SET "name" = 'Unknown' WHERE "name" IS NULL;
 
-*/
--- AlterTable
-ALTER TABLE "User" ADD COLUMN     "name" TEXT NOT NULL;
+-- 3. Modifier la colonne "name" pour la rendre NON NULLABLE
+ALTER TABLE "User" ALTER COLUMN "name" SET NOT NULL;

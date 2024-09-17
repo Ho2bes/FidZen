@@ -1,6 +1,28 @@
-version: '3.7'
+version: '3.8'
 
 services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: EL8687NBD8696
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - fidzen-network
+
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - fidzen-network
+
   backend:
     build:
       context: ./backend
@@ -9,6 +31,14 @@ services:
       - ./backend:/app
     ports:
       - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:EL8687NBD8696@postgres:5432/postgres"
+      MONGO_URI: "mongodb://mongo:27017/fidzen"
+    depends_on:
+      - postgres
+      - mongo
+    networks:
+      - fidzen-network
 
   frontend:
     build:
@@ -16,3 +46,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:80"
+    networks:
+      - fidzen-network
+
+volumes:
+  pgdata:
+  mongodbdata:
+
+networks:
+  fidzen-network:

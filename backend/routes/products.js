@@ -1,9 +1,7 @@
 // products.js
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaclient'); // Importer prisma depuis prismaclient.js
 
 // Route pour récupérer tous les produits achetés
 router.get('/', async (req, res) => {

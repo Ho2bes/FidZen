@@ -1,8 +1,24 @@
-# Utiliser l'image officielle de Flutter pour le build
+# Utiliser une version de Flutter stable (dernière version disponible)
 FROM cirrusci/flutter:stable AS build
+
+# Ajouter un utilisateur non root pour éviter les problèmes de permissions
+RUN useradd -ms /bin/bash flutteruser
 
 # Définir le répertoire de travail
 WORKDIR /app
+
+# Passer à l'utilisateur non root
+USER flutteruser
+
+# Configurer Git pour autoriser le répertoire Flutter
+RUN git config --global --add safe.directory /sdks/flutter
+
+# Fixer les permissions pour tout le répertoire Flutter
+USER root
+RUN sudo chown -R flutteruser:flutteruser /sdks/flutter
+
+# Revenir à l'utilisateur non-root
+USER flutteruser
 
 # Copier les fichiers du projet Flutter
 COPY . .

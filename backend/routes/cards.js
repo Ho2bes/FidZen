@@ -1,9 +1,7 @@
 // cards.js
 const express = require('express');
 const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../prisma/prismaclient'); // Utilise le fichier prismaclient.js
 
 // Route pour récupérer toutes les cartes de fidélité de l'utilisateur connecté
 router.get('/', async (req, res) => {
