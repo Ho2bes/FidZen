@@ -27,8 +27,8 @@ jobs:
 
       - name: Run Backend Tests
         run: |
-          cd backend  # Reste dans le dossier backend
-          npm test
+          cd backend
+          npm test  # Lancement des tests après avoir corrigé le package.json
 
       - name: Install Frontend Dependencies
         run: |
