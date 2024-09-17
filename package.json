@@ -11,7 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0",
-    "prisma": "^5.19.0"
+    "prisma": "^5.19.0",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "@prisma/client": "^5.19.0",
