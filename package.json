@@ -15,7 +15,7 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.19.0",
+    "@prisma/client": "^5.19.1",
     "mongoose": "^8.6.1"
   }
 }

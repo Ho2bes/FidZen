@@ -7,7 +7,7 @@ const app = express(); // Initialiser express
 const mongoose = require('mongoose');
 const prisma = require('./prisma/prismaclient'); // Importer le fichier prismaClient.js pour gérer Prisma
 
-// Connexion à MongoDB
+// Connexion à MongoDB (suppression des options obsolètes)
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/fidzen';
 mongoose.connect(mongoURI)
   .then(() => {
@@ -43,28 +43,6 @@ app.use('/api/receipts', receiptRoutes); // Routes pour la gestion des reçus
 app.use('/api/products', productRoutes); // Routes pour la gestion des produits
 app.use('/api/logs', logRoutes); // Routes MongoDB pour les logs
 app.use('/api/notifications', notificationRoutes); // Routes MongoDB pour les notifications
-
-// Fonction de test pour vérifier si l'utilisateur est récupéré correctement
-async function testUserRetrieval() {
-  const testUserId = "votre_id_utilisateur"; // Remplacez par l'ID que vous avez reçu
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: testUserId },
-    });
-
-    if (!user) {
-      console.log('Utilisateur non trouvé.');
-    } else {
-      console.log('Utilisateur trouvé:', user);
-    }
-  } catch (error) {
-    console.error('Erreur lors de la récupération de l’utilisateur:', error.message);
-  }
-}
-
-// Appeler la fonction de test
-// Vous pouvez commenter ceci après l'avoir testé
-testUserRetrieval();
 
 // Démarrer le serveur
 const server = app.listen(3000, () => {
