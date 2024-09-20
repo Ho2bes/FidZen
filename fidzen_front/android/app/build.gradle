@@ -1,46 +1,54 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.0' // Compatible avec Gradle 7.2 et Flutter
+        classpath 'com.google.gms:google-services:4.3.10' // Mise à jour de Google Services
+    }
+}
+
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
-    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.github.node-gradle.node' version '3.1.0' // Plugin Node.js, si nécessaire
 }
 
-android {
-    namespace = "com.example.fidzen_front"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
-    }
-
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.fidzen_front"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
-
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
-        }
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
 
-flutter {
-    source = "../.."
+rootProject.buildDir = "../build"
+
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(":app")
+    // Supprimé le bloc `android` car il est déplacé dans `app/build.gradle`.
 }
 
-apply plugin: 'com.google.gms.google-services'
+// Tâche clean pour supprimer le répertoire de build
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+
+// Configuration de Node.js et npm
+node {
+    version = '14.17.0' // La version de Node.js que vous souhaitez utiliser
+    npmVersion = '6.14.13' // La version de npm que vous souhaitez utiliser
+    download = true // Pour télécharger automatiquement Node.js
+}
+
+// Tâche pour installer les dépendances npm
+task installDependencies(type: NpmTask) {
+    args = ['install']
+}
+
+// Tâche pour démarrer le serveur Node.js
+task startServer(type: NpmTask) {
+    args = ['run', 'start']
+}
+
+// Dépendance : startServer dépend de installDependencies
+startServer.dependsOn installDependencies
