@@ -7,47 +7,65 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: EL8687NBD8696
       POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - fidzen-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   mongo:
-  image: mongo:6.0.17
-  ports:
+    image: mongo:6.0.17
+    ports:
       - "27017:27017"
-  volumes:
+    volumes:
       - mongodbdata:/data/db
-  networks:
+    networks:
       - fidzen-network
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    volumes:
-      - ./backend:/app
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: "postgresql://postgres:EL8687NBD8696@postgres:5432/postgres"
       MONGO_URI: "mongodb://mongo:27017/fidzen"
     depends_on:
-      - postgres
-      - mongo
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
     networks:
       - fidzen-network
 
   frontend:
     build:
       context: ./fidzen_front
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile  # Utilise le Dockerfile modifié pour Flutter
     ports:
       - "8080:80"
+    depends_on:
+      - backend  # S'assure que le backend soit démarré avant le frontend
     networks:
       - fidzen-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://backend:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   pgdata:
@@ -55,3 +73,4 @@ volumes:
 
 networks:
   fidzen-network:
+    driver: bridge

@@ -1,42 +1,67 @@
-# Utiliser une version de Flutter stable (dernière version disponible)
-FROM cirrusci/flutter:stable AS build
+# Étape 1: Utilisation de Flutter pour la compilation
+FROM ubuntu:22.04 AS build
 
-# Ajouter un utilisateur non root pour éviter les problèmes de permissions
+# Installer les dépendances nécessaires
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    unzip \
+    xz-utils \
+    zip \
+    libglu1-mesa \
+    ca-certificates \
+    git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Télécharger et installer Flutter
+RUN curl -o flutter.tar.xz "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.0-stable.tar.xz" && \
+    tar xf flutter.tar.xz -C /usr/local && \
+    rm flutter.tar.xz
+
+# Ajouter Flutter au PATH
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+
+# Vérifier l'installation de Flutter
+RUN flutter doctor
+
+# Créer un utilisateur non root pour éviter les problèmes de permissions
 RUN useradd -ms /bin/bash flutteruser
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Passer à l'utilisateur non root
-USER flutteruser
-
-# Configurer Git pour autoriser le répertoire Flutter
-RUN git config --global --add safe.directory /sdks/flutter
-
-# Fixer les permissions pour tout le répertoire Flutter
-USER root
-RUN sudo chown -R flutteruser:flutteruser /sdks/flutter
-
-# Revenir à l'utilisateur non-root
-USER flutteruser
-
-# Copier les fichiers du projet Flutter
+# Copier les fichiers de l'application avec les permissions correctes
 COPY . .
 
-# Installer les dépendances Flutter
+# Changer les permissions pour l'utilisateur non root
+RUN chown -R flutteruser:flutteruser /app /usr/local/flutter
+
+# Changer d'utilisateur
+USER flutteruser
+
+# Définir le répertoire de travail pour le projet Flutter
+WORKDIR /app/fidzen_front
+
+# Supprimer manuellement le dossier build s'il existe
+RUN rm -rf build
+
+# Supprimer les fichiers .dart_tool, .packages et pubspec.lock
+RUN rm -rf .dart_tool .packages pubspec.lock || true
+
+# Installation des dépendances
 RUN flutter pub get
 
-# Compiler l'application Flutter en version web
-RUN flutter build web
+# Compilation du projet Flutter avec désactivation du tree-shaking des icônes
+RUN flutter build web --no-tree-shake-icons
 
-# Utiliser une image légère de serveur web pour servir le contenu statique
+# Étape 2: Utiliser une image Nginx pour servir les fichiers
 FROM nginx:alpine
 
-# Copier le contenu du build web de Flutter dans le répertoire nginx
-COPY --from=build /app/build/web /usr/share/nginx/html
+# Copier les fichiers de build dans le répertoire Nginx
+COPY --from=build /app/fidzen_front/build/web /usr/share/nginx/html
 
-# Exposer le port utilisé par nginx (par défaut 80)
+# Exposer le port utilisé par Nginx (80 par défaut)
 EXPOSE 80
 
-# Démarrer nginx
+# Lancer Nginx
 CMD ["nginx", "-g", "daemon off;"]
