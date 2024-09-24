@@ -21,16 +21,28 @@ rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
     project.evaluationDependsOn(":app")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
     if (project.hasProperty("android")) {
         android {
             compileSdkVersion 33
             buildToolsVersion "33.0.0"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
             defaultConfig {
                 minSdkVersion 21
                 targetSdkVersion 33
                 versionCode 1
                 versionName "1.0.0"
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
             buildTypes {
                 release {
                     minifyEnabled false
@@ -40,23 +52,43 @@ subprojects {
         }
     }
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
 // Tâche clean pour supprimer le répertoire de build
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
 // Configuration de Node.js et npm
 node {
     version = '14.17.0' // La version de Node.js que vous souhaitez utiliser
     npmVersion = '6.14.13' // La version de npm que vous souhaitez utiliser
     download = true // Pour télécharger automatiquement Node.js
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
 // Tâche pour installer les dépendances npm
 task installDependencies(type: NpmTask) {
     args = ['install']
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
 // Tâche pour démarrer le serveur Node.js
 task startServer(type: NpmTask) {
     args = ['run', 'start']
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9b74b7f682bde03ac3164f2dbefdaaa493ddb07e
 // Dépendance : startServer dépend de installDependencies
 startServer.dependsOn installDependencies
