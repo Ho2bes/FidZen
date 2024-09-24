@@ -4,70 +4,59 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.0' // Compatible avec Gradle 7.2
-        classpath 'com.google.gms:google-services:4.4.2' // Google Services
+        classpath 'com.android.tools.build:gradle:7.2.0' // Compatible avec Gradle 7.2 et Flutter
+        classpath 'com.google.gms:google-services:4.3.10' // Mise à jour de Google Services
     }
 }
-
 plugins {
-    id 'com.github.node-gradle.node' version '3.1.0' // Placez le bloc plugins après buildscript
+    id 'com.github.node-gradle.node' version '3.1.0' // Plugin Node.js, si nécessaire
 }
-
 allprojects {
     repositories {
         google()
         mavenCentral()
     }
 }
-
 rootProject.buildDir = "../build"
-
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
     project.evaluationDependsOn(":app")
-
-    afterEvaluate { project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 33 // Mettez à jour selon vos besoins
-                buildToolsVersion "33.0.0" // Version des outils de construction
-
-                defaultConfig {
-                    applicationId "com.fidzen.app" // Remplacez par l'ID de votre application
-                    minSdkVersion 21 // Version minimale du SDK Android
-                    targetSdkVersion 33 // Version cible du SDK Android
-                    versionCode 1
-                    versionName "1.0.0"
-                }
-
-                buildTypes {
-                    release {
-                        minifyEnabled false
-                        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-                    }
+    if (project.hasProperty("android")) {
+        android {
+            compileSdkVersion 33
+            buildToolsVersion "33.0.0"
+            defaultConfig {
+                minSdkVersion 21
+                targetSdkVersion 33
+                versionCode 1
+                versionName "1.0.0"
+            }
+            buildTypes {
+                release {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
                 }
             }
         }
     }
 }
-
+// Tâche clean pour supprimer le répertoire de build
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
-// Ajout de tâches spécifiques pour Node.js (si nécessaire)
+// Configuration de Node.js et npm
 node {
     version = '14.17.0' // La version de Node.js que vous souhaitez utiliser
     npmVersion = '6.14.13' // La version de npm que vous souhaitez utiliser
     download = true // Pour télécharger automatiquement Node.js
 }
-
+// Tâche pour installer les dépendances npm
 task installDependencies(type: NpmTask) {
     args = ['install']
 }
-
+// Tâche pour démarrer le serveur Node.js
 task startServer(type: NpmTask) {
     args = ['run', 'start']
 }
-
+// Dépendance : startServer dépend de installDependencies
 startServer.dependsOn installDependencies
