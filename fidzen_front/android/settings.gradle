@@ -4,7 +4,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-
     def flutterSdkPath = {
         def properties = new Properties()
         file("local.properties").withInputStream { properties.load(it) }
@@ -12,16 +11,12 @@ pluginManagement {
         assert flutterSdkPath != null, "flutter.sdk not set in local.properties"
         return flutterSdkPath
     }()
-
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
-
 }
-
 plugins {
     id "com.android.application" version "7.2.0" apply false
     id "org.jetbrains.kotlin.android" version "1.7.10" apply false
     id "dev.flutter.flutter-plugin-loader" version "1.0.0" apply false
 }
-
 rootProject.name = 'FidZen'
 include ":app"
