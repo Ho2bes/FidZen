@@ -24,13 +24,13 @@ ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PAT
 # Vérifier l'installation de Flutter
 RUN flutter doctor
 
-# Créer un utilisateur non root pour éviter les problèmes de permissions
-RUN useradd -ms /bin/bash flutteruser
+# Créer un utilisateur non root avec UID et GID
+RUN useradd -ms /bin/bash -u 1000 -U flutteruser
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers de l'application avec les permissions correctes
+# Copier les fichiers de l'application dans le conteneur
 COPY . .
 
 # Changer les permissions pour l'utilisateur non root
@@ -39,20 +39,23 @@ RUN chown -R flutteruser:flutteruser /app /usr/local/flutter
 # Changer d'utilisateur
 USER flutteruser
 
-# Définir le répertoire de travail pour le projet Flutter
+# **Définir le répertoire de travail pour le projet Flutter**
 WORKDIR /app/fidzen_front
-
-# Supprimer manuellement le dossier build s'il existe
-RUN rm -rf build
-
-# Supprimer les fichiers .dart_tool, .packages et pubspec.lock
-RUN rm -rf .dart_tool .packages pubspec.lock || true
 
 # Installation des dépendances
 RUN flutter pub get
 
-# Compilation du projet Flutter avec désactivation du tree-shaking des icônes
-RUN flutter build web --no-tree-shake-icons
+# Supprimer manuellement le dossier build s'il existe
+RUN [ -d build ] && rm -rf build || echo "Build directory does not exist, skipping removal."
+
+# Nettoyer le cache Flutter
+RUN flutter clean
+
+# Compilation du projet Flutter avec désactivation du tree-shaking des icônes et verbosité maximale
+RUN flutter build web --no-tree-shake-icons -vvv || { echo 'Flutter build failed'; tail -n 100 /app/fidzen_front/.dart_tool/flutter_build/*/log.txt; exit 1; }
+
+# Vérification de la présence du dossier build/web
+RUN if [ -d build/web ]; then echo "Build/web directory exists"; ls -la build/web; else echo "Build/web directory does not exist"; exit 1; fi
 
 # Étape 2: Utiliser une image Nginx pour servir les fichiers
 FROM nginx:alpine

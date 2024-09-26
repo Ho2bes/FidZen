@@ -28,21 +28,24 @@ services:
       - mongodbdata:/data/db
     networks:
       - fidzen-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
     healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.runCommand({ ping: 1 })"]
+      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   backend:
     build:
-      context: ./backend
+      context: ./fidzen_front
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: "postgresql://postgres:EL8687NBD8696@postgres:5432/postgres"
-      MONGO_URI: "mongodb://mongo:27017/fidzen"
+      MONGO_URI: "mongodb://root:rootpassword@mongo:27017/fidzen?authSource=admin"
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,8 +60,11 @@ services:
       dockerfile: Dockerfile  # Utilise le Dockerfile modifié pour Flutter
     ports:
       - "8080:80"
+    volumes:
+      - ./fidzen_front:/app/fidzen_front  # Ajout du volume pour assurer la synchronisation
     depends_on:
-      - backend  # S'assure que le backend soit démarré avant le frontend
+      backend:
+        condition: service_healthy  # S'assure que le backend soit démarré avant le frontend
     networks:
       - fidzen-network
     healthcheck:
