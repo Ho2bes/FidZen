@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/auth';
+const API_URL = 'http://localhost:3000/auth';
 
 export const register = async (email, password, name) => {
   try {

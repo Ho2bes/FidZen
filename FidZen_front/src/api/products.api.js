@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/products';
+const API_URL = 'http://localhost:3000/products';
 
 export const getAllProducts = async () => {
   try {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/cards';
+const API_URL = 'http://localhost:3000/cards';
 
 export const getAllCards = async () => {
   try {

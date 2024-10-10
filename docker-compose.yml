@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:14
@@ -39,7 +37,7 @@ services:
 
   backend:
     build:
-      context: ./fidzen_front
+      context: ./backend  # Chemin corrigé vers le dossier backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
@@ -53,25 +51,6 @@ services:
         condition: service_healthy
     networks:
       - fidzen-network
-
-  frontend:
-    build:
-      context: ./fidzen_front
-      dockerfile: Dockerfile  # Utilise le Dockerfile modifié pour Flutter
-    ports:
-      - "8080:80"
-    volumes:
-      - ./fidzen_front:/app/fidzen_front  # Ajout du volume pour assurer la synchronisation
-    depends_on:
-      backend:
-        condition: service_healthy  # S'assure que le backend soit démarré avant le frontend
-    networks:
-      - fidzen-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://backend:3000 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
 volumes:
   pgdata:

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/users';
+const API_URL = 'http://localhost:3000/users';
 
 export const createUser = async (email, password, name) => {
   try {

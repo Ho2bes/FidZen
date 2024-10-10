@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/logs';
+const API_URL = 'http://localhost:3000/logs';
 
 export const createLog = async (userId, action) => {
   try {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/receipts';
+const API_URL = 'http://localhost:3000/receipts';
 
 export const getAllReceipts = async () => {
   try {

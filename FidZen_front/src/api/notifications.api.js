@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://ton-backend-url/notifications';
+const API_URL = 'http://localhost:3000/notifications';
 
 export const createNotification = async (userId, message) => {
   try {
