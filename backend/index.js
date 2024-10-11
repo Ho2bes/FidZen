@@ -7,7 +7,7 @@ const app = express(); // Initialiser express
 const mongoose = require('mongoose');
 const prisma = require('./prisma/prismaclient'); // Importer le fichier prismaClient.js pour gérer Prisma
 
-// Connexion à MongoDB (suppression des options obsolètes)
+/* Connexion à MongoDB (suppression des options obsolètes)
 const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/fidzen';
 mongoose.connect(mongoURI)
   .then(() => {
@@ -16,7 +16,7 @@ mongoose.connect(mongoURI)
   .catch(err => {
     console.error('MongoDB connection error:', err);
   });
-
+*/
 // Middleware pour parser le JSON
 app.use(express.json());
 
