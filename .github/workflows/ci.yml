@@ -11,11 +11,51 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+<<<<<<< HEAD
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
+=======
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: EL8687NBD8696
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      mongo:
+        image: mongo:6.0.17
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: example
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd="echo 'db.runCommand({ ping: 1 })' | mongosh"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        volumes:
+          - /data/db
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+>>>>>>> b8f697b193878068caa988978cd5a6bc380bca21
         with:
           node-version: '20'
 
@@ -24,6 +64,7 @@ jobs:
           cd backend
           npm install
 
+<<<<<<< HEAD
       - name: Run Backend Tests
         run: |
           cd backend
@@ -47,3 +88,14 @@ jobs:
         run: |
           echo "Deploying to Production..."
           # Ajoutez votre commande de déploiement ici
+=======
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for PostgreSQL...";
+            sleep 5;
+          done
+
+      - name: Wait for MongoDB
+        run: |
+>>>>>>> b8f697b193878068caa988978cd5a6bc380bca21

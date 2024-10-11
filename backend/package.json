@@ -4,7 +4,7 @@
   "description": "fidelity apps",
   "main": "app.js",
   "scripts": {
-    "test": "npm test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,23 @@
   },
   "homepage": "https://github.com/Ho2bes/FidZen#readme",
   "dependencies": {
-    "@prisma/client": "^5.18.0",
-    "express": "^4.19.2"
+    "@prisma/client": "^5.19.1",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.6.1"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "prisma": "^5.19.1",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }

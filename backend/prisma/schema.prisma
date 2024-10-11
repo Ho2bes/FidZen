@@ -7,8 +7,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id    Int     @id @default(autoincrement())
-  name  String? @db.VarChar(100)
-  email String  @unique @db.VarChar(100)
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  name          String
+  auditLogs     AuditLog[]
+  loyaltyCards  LoyaltyCard[]
+  notifications Notification[]
+  roles         Role[]         @relation("UserRoles")
+  receipts      Receipt[]      // Ajout de la relation inverse avec Receipt
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  permissions String[]
+  users       User[]   @relation("UserRoles")
+}
+
+model Notification {
+  id              String         @id @default(uuid())
+  userId          String
+  message         String
+  createdAt       DateTime       @default(now())
+  productRecallId String?
+  productRecall   ProductRecall? @relation(fields: [productRecallId], references: [id])
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LoyaltyCard {
+  id         String    @id @default(uuid())
+  userId     String
+  cardNumber String
+  storeName  String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  receipts   Receipt[]
+}
+
+model Receipt {
+  id           String   @id @default(uuid())
+  userId       String
+  cardId       String
+  purchaseDate DateTime
+  totalAmount  Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card         LoyaltyCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  products     Product[]
+}
+
+model Product {
+  id            String         @id @default(uuid())
+  receiptId     String
+  price         Float
+  code          String
+  name          String
+  receipt       Receipt        @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+  productRecall ProductRecall?
+}
+
+model ProductRecall {
+  id            String         @id @default(uuid())
+  recallDate    DateTime
+  description   String
+  productId     String         @unique
+  notifications Notification[]
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  action     String
+  entityId   String
+  entityType String
+  timestamp  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
