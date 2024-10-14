@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextInput, Text, ScrollView } from 'react-native';
-import { register, login } from '../api/auth.api';
+import { register, login } from '../api/auth.api'; // Utilise auth.api.js pour l'enregistrement et la connexion
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -11,14 +11,12 @@ const Auth = () => {
 
   const handleRegister = async () => {
     try {
-      // Correction de l'appel de la fonction register avec les bons paramètres
-      const response = await register(email, password, name);
-      setMessage(response.message || 'Enregistrement réussi');
+      await register(email, password, name); // Utilise l'API d'authentification pour créer un compte
+      setMessage('Enregistrement réussi');
       setEmail('');
       setPassword('');
       setName('');
     } catch (error) {
-      // Ajout d'une meilleure gestion des erreurs pour capturer plus de détails
       console.error('Erreur lors de l’enregistrement', error.response ? error.response.data : error.message);
       setMessage('Erreur lors de l’enregistrement');
     }
@@ -26,7 +24,7 @@ const Auth = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await login({ email, password });
+      const response = await login(email, password); // Utilise l'API d'authentification pour la connexion
       setToken(response.token);
       setMessage('Connexion réussie');
     } catch (error) {

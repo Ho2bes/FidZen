@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/users';
+const API_URL = 'http://localhost:3000/api/users'; // Correction de l'URL
 
 export const createUser = async (email, password, name) => {
   try {
