@@ -11,13 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-<<<<<<< HEAD
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-=======
 
     services:
       postgres:
@@ -55,7 +48,6 @@ jobs:
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
->>>>>>> b8f697b193878068caa988978cd5a6bc380bca21
         with:
           node-version: '20'
 
@@ -64,31 +56,6 @@ jobs:
           cd backend
           npm install
 
-<<<<<<< HEAD
-      - name: Run Backend Tests
-        run: |
-          cd backend
-          npm test
-
-      - name: Install Frontend Dependencies
-        run: |
-          cd fidzen_front
-          flutter pub get
-
-      - name: Run Frontend Tests
-        run: |
-          cd fidzen_front
-          flutter test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Deploy to Production
-        run: |
-          echo "Deploying to Production..."
-          # Ajoutez votre commande de déploiement ici
-=======
       - name: Wait for PostgreSQL
         run: |
           until pg_isready -h localhost -p 5432 -U postgres; do
@@ -98,4 +65,3 @@ jobs:
 
       - name: Wait for MongoDB
         run: |
->>>>>>> b8f697b193878068caa988978cd5a6bc380bca21
