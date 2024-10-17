@@ -8,6 +8,7 @@ router.post('/', async (req, res) => {
   const { email, password, name } = req.body;
 
   if (!email || !password || !name) {
+    console.log('Tous les champs requis ne sont pas remplis.');
     return res.status(400).json({ error: 'Tous les champs (email, password, name) sont requis.' });
   }
 
@@ -17,6 +18,7 @@ router.post('/', async (req, res) => {
       where: { email: email },
     });
     if (existingUser) {
+      console.log('Cet email est déjà utilisé:', email);
       return res.status(400).json({ error: 'Cet email est déjà utilisé.' });
     }
 
@@ -31,6 +33,8 @@ router.post('/', async (req, res) => {
       },
     });
 
+    console.log('Utilisateur créé avec succès:', newUser);
+
     // Ne pas renvoyer le mot de passe hashé dans la réponse
     const { password: _, ...userWithoutPassword } = newUser;
 
@@ -44,6 +48,7 @@ router.post('/', async (req, res) => {
 // Récupérer un utilisateur par ID
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
+  console.log('Tentative de récupération de l\'utilisateur avec ID:', id);
 
   try {
     // Chercher l'utilisateur par son ID (UUID)
@@ -52,8 +57,11 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!user) {
+      console.log('Utilisateur non trouvé:', id);
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
+
+    console.log('Utilisateur récupéré avec succès:', user);
 
     // Ne pas renvoyer le mot de passe
     const { password: _, ...userWithoutPassword } = user;
@@ -69,6 +77,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { email, password, name } = req.body;
+  console.log('Tentative de mise à jour de l\'utilisateur avec ID:', id);
 
   try {
     // Si un mot de passe est fourni, on le hash avant de l'enregistrer
@@ -83,6 +92,8 @@ router.put('/:id', async (req, res) => {
       data: updatedData,
     });
 
+    console.log('Utilisateur mis à jour avec succès:', updatedUser);
+
     // Ne pas renvoyer le mot de passe dans la réponse
     const { password: _, ...userWithoutPassword } = updatedUser;
 
@@ -96,11 +107,13 @@ router.put('/:id', async (req, res) => {
 // Supprimer un utilisateur
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
+  console.log('Tentative de suppression de l\'utilisateur avec ID:', id);
 
   try {
     await prisma.user.delete({
       where: { id: id },
     });
+    console.log('Utilisateur supprimé avec succès:', id);
     res.status(204).send();
   } catch (err) {
     console.error('Erreur lors de la suppression de l’utilisateur:', err.message);

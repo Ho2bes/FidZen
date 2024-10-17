@@ -19,6 +19,7 @@ model User {
   notifications Notification[]
   roles         Role[]         @relation("UserRoles")
   receipts      Receipt[]      // Ajout de la relation inverse avec Receipt
+  logs          Log[]          // Ajout de la relation inverse avec Log
 }
 
 model Role {
@@ -89,4 +90,12 @@ model AuditLog {
   entityType String
   timestamp  DateTime @default(now())
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Log {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }

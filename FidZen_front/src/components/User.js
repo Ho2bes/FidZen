@@ -1,59 +1,75 @@
-// src/components/User.js
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, TextInput, ScrollView, Text } from 'react-native';
-import { addUser, getUser, updateUser } from '../api/user.api';
+import { getUserById, updateUser, deleteUser } from '../api/users.api'; // Import correct des fonctions
 
 const User = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [user, setUser] = useState(null);
-  const [userId] = useState('123'); // ID de l’utilisateur à récupérer
+  const [message, setMessage] = useState(''); // Ajout d'un message pour afficher les résultats
+  const [userId] = useState('e0f36199-dab0-4663-b33b-85a6c19adb97'); // ID de l'utilisateur à gérer
 
+  // Fonction pour récupérer un utilisateur existant
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const data = await getUser(userId);
+        const data = await getUserById(userId); // Utilise la fonction correcte getUserById
         setUser(data);
+        setMessage('Utilisateur récupéré avec succès');
       } catch (error) {
         console.error('Erreur lors de la récupération de l’utilisateur', error);
+        setMessage('Erreur lors de la récupération de l’utilisateur');
       }
     };
     fetchUser();
   }, [userId]);
 
-  const handleAddUser = async () => {
+  // Fonction pour mettre à jour l'utilisateur
+  const handleUpdateUser = async () => {
     try {
-      const newUser = await addUser({ email, password, name });
-      setUser(newUser);
-      console.log('Utilisateur ajouté avec succès');
+      const updatedUser = await updateUser(userId, email, password, name); // Utilisation de updateUser avec les paramètres individuels
+      setUser(updatedUser);
+      setMessage('Utilisateur mis à jour avec succès');
+      console.log('Utilisateur mis à jour avec succès :', updatedUser);
+      // Réinitialiser les champs après la mise à jour
       setEmail('');
       setPassword('');
       setName('');
     } catch (error) {
-      console.error('Erreur lors de l’ajout de l’utilisateur', error);
+      console.error('Erreur lors de la mise à jour de l’utilisateur', error);
+      setMessage('Erreur lors de la mise à jour de l’utilisateur');
     }
   };
 
-  const handleUpdateUser = async () => {
+  // Fonction pour supprimer l'utilisateur
+  const handleDeleteUser = async () => {
     try {
-      const updatedUser = await updateUser(userId, { email, password, name });
-      setUser(updatedUser);
-      console.log('Utilisateur mis à jour avec succès');
+      await deleteUser(userId); // Appel à la fonction deleteUser
+      setMessage('Utilisateur supprimé avec succès');
+      setUser(null); // Efface les informations de l'utilisateur après suppression
+      console.log('Utilisateur supprimé avec succès');
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de l’utilisateur', error);
+      console.error('Erreur lors de la suppression de l’utilisateur', error);
+      setMessage('Erreur lors de la suppression de l’utilisateur');
     }
   };
 
   return (
     <ScrollView>
-      <TextInput value={email} onChangeText={setEmail} placeholder="Email" />
-      <TextInput value={password} onChangeText={setPassword} placeholder="Mot de passe" secureTextEntry />
-      <TextInput value={name} onChangeText={setName} placeholder="Nom" />
+      {/* Champs pour modifier l'utilisateur */}
+      <TextInput value={email} onChangeText={setEmail} placeholder="Nouvel Email" />
+      <TextInput value={password} onChangeText={setPassword} placeholder="Nouveau Mot de passe" secureTextEntry />
+      <TextInput value={name} onChangeText={setName} placeholder="Nouveau Nom" />
 
-      <Button title="Ajouter l'utilisateur" onPress={handleAddUser} />
+      {/* Boutons pour mettre à jour et supprimer */}
       <Button title="Mettre à jour l'utilisateur" onPress={handleUpdateUser} />
+      <Button title="Supprimer l'utilisateur" onPress={handleDeleteUser} />
 
+      {/* Affichage du message de confirmation */}
+      {message ? <Text>{message}</Text> : null}
+
+      {/* Affichage des informations de l'utilisateur récupéré */}
       {user && (
         <View>
           <Text>ID: {user.id}</Text>

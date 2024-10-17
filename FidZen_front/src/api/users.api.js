@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
-const API_URL = 'http://localhost:3000/api/users'; // Correction de l'URL
+// URL API pour Android ou iOS
+const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api/users' : 'http://localhost:3000/api/user';
 
 export const createUser = async (email, password, name) => {
   try {

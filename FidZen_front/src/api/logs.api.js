@@ -1,10 +1,14 @@
+// src/api/logs.api.js
 import axios from 'axios';
+import { Platform } from 'react-native';
 
-const API_URL = 'http://localhost:3000/logs';
+// URL API pour Android ou iOS
+const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api/logs' : 'http://localhost:3000/api/logs';
 
+// Créer un log
 export const createLog = async (userId, action) => {
   try {
-    const response = await axios.post(`${API_URL}/logs`, {
+    const response = await axios.post(`${API_URL}/`, {
       userId,
       action,
     });
@@ -15,9 +19,10 @@ export const createLog = async (userId, action) => {
   }
 };
 
+// Récupérer les logs d'un utilisateur
 export const getLogsByUserId = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/logs/user/${userId}`);
+    const response = await axios.get(`${API_URL}/user/${userId}`);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des logs:', error);
@@ -25,9 +30,10 @@ export const getLogsByUserId = async (userId) => {
   }
 };
 
+// Supprimer un log
 export const deleteLog = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/logs/${id}`);
+    const response = await axios.delete(`${API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la suppression du log:', error);

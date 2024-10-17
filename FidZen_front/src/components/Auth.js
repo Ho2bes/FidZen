@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextInput, Text, ScrollView } from 'react-native';
-import { register, login } from '../api/auth.api'; // Utilise auth.api.js pour l'enregistrement et la connexion
+import { register, login } from '../api/auth.api';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -9,26 +9,29 @@ const Auth = () => {
   const [token, setToken] = useState('');
   const [message, setMessage] = useState('');
 
+  useEffect(() => {
+    console.log("Message mis à jour:", message); // Log à chaque changement de `message`
+  }, [message]);
+
   const handleRegister = async () => {
     try {
-      await register(email, password, name); // Utilise l'API d'authentification pour créer un compte
+      console.log("Tentative d'enregistrement avec:", { email, password, name });
+      await register(email, password, name);
       setMessage('Enregistrement réussi');
       setEmail('');
       setPassword('');
       setName('');
     } catch (error) {
-      console.error('Erreur lors de l’enregistrement', error.response ? error.response.data : error.message);
       setMessage('Erreur lors de l’enregistrement');
     }
   };
 
   const handleLogin = async () => {
     try {
-      const response = await login(email, password); // Utilise l'API d'authentification pour la connexion
+      const response = await login(email, password);
       setToken(response.token);
       setMessage('Connexion réussie');
     } catch (error) {
-      console.error('Erreur lors de la connexion', error.response ? error.response.data : error.message);
       setMessage('Erreur lors de la connexion');
     }
   };
@@ -42,6 +45,7 @@ const Auth = () => {
       <Button title="S'enregistrer" onPress={handleRegister} />
       <Button title="Se connecter" onPress={handleLogin} />
 
+      {/* Assurez-vous que message et token sont bien dans un composant <Text> */}
       {message ? <Text>{message}</Text> : null}
       {token ? <Text>Token: {token}</Text> : null}
     </ScrollView>
@@ -49,3 +53,4 @@ const Auth = () => {
 };
 
 export default Auth;
+
