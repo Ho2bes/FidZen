@@ -1,11 +1,33 @@
 import React from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import LoyaltyCards from './src/components/LoyaltyCards';  // Ton composant des cartes de fidélité
+
+export default function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <LoyaltyCards />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+
+
+/*import React from 'react';
 import Logs from './src/components/Logs'; // Assure-toi que le chemin est correct
 
 const App = () => {
   return <Logs />;
 };
 
-export default App;
+export default App;*/
 
 
 /*import React from 'react';
