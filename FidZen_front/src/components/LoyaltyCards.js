@@ -11,8 +11,12 @@ const LoyaltyCards = () => {
 
   useEffect(() => {
     const fetchCards = async () => {
-      const data = await getAllCards();
-      setCards(data);
+      try {
+        const data = await getAllCards();
+        setCards(data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des cartes', error);
+      }
     };
     fetchCards();
   }, []);
@@ -27,12 +31,19 @@ const LoyaltyCards = () => {
 
     if (!result.cancelled) {
       setImage(result);
+    } else {
+      console.log("Sélection d'image annulée");
     }
   };
 
   const handleAddCard = async () => {
+    if (!image) {
+      console.error("Aucune image sélectionnée");
+      return;
+    }
+
     try {
-      await addCard(cardNumber, storeName, image, 'userId123'); // Remplace par l'ID utilisateur
+      await addCard(cardNumber, storeName, image, 'userId123'); // Remplacer par l'ID utilisateur correct
       setCardNumber('');
       setStoreName('');
       setImage(null);
