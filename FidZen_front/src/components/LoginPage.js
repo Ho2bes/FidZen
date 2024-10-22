@@ -8,39 +8,37 @@ export default function LoginPage({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Évite que le clavier ne cache la vue
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardView}
     >
-      <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.gradient}>
-        {/* Logo placé au-dessus avec une position absolue */}
+      {/* Utilisation du même dégradé bleu-vert que sur la FirstPage */}
+      <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
         <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
 
         <View style={styles.container}>
           <Text style={styles.title}>Sign in</Text>
 
-          {/* Champs de saisie avec conteneur de dégradé */}
+          {/* Champs de saisie pour Login */}
           <View style={styles.inputContainer}>
-            <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.inputGradient}>
-              <TextInput
-                placeholder="Login"
-                placeholderTextColor="#ffffff" // Placeholder en blanc
-                style={styles.input}
-                value={login}
-                onChangeText={setLogin}
-              />
-            </LinearGradient>
+            <TextInput
+              placeholder="Login"
+              placeholderTextColor="#005f99" // Texte en bleu foncé
+              style={styles.input}
+              value={login}
+              onChangeText={setLogin}
+            />
           </View>
+
+          {/* Champs de saisie pour Password */}
           <View style={styles.inputContainer}>
-            <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.inputGradient}>
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="#ffffff" // Placeholder en blanc
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </LinearGradient>
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#005f99" // Texte en bleu foncé
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
           </View>
 
           {/* Bouton Enter */}
@@ -72,15 +70,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderRadius: 15, // Pour arrondir l'arrière-plan des champs
+    borderRadius: 15,
     paddingVertical: 30,
-    marginTop: 180, // Ajouter un espace pour que le logo ne se superpose pas
+    marginTop: 180,
   },
   logo: {
-    width: 200,  // Largeur du logo ajustée
-    height: 200, // Hauteur du logo ajustée
-    position: 'absolute', // Le logo flottant au-dessus
-    top: 20, // Position du logo en haut
+    width: 200,
+    height: 200,
+    position: 'absolute',
+    top: 20,
   },
   title: {
     fontSize: 32,
@@ -92,23 +90,19 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
   },
-  inputGradient: {
-    borderRadius: 5, // Même arrondi que les champs
-    padding: 2, // Ajoute un léger padding pour l'effet de bord
-  },
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: 'transparent', // Fond transparent pour laisser le dégradé
+    backgroundColor: '#f0f0f0', // Fond gris clair
     paddingHorizontal: 10,
-    color: '#ffffff', // Texte en blanc
+    color: '#005f99', // Texte en bleu foncé
     borderRadius: 5,
   },
   button: {
     width: '60%',
     backgroundColor: '#005f99',
     paddingVertical: 15,
-    borderRadius: 25, // Arrondi le bouton
+    borderRadius: 25,
     alignItems: 'center',
     marginTop: 20,
   },

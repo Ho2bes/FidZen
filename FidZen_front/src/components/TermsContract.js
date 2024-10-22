@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 export default function TermsContract({ navigation }) {
   return (
-    <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.gradient}>
+    <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
       {/* Logo en haut */}
       <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
 

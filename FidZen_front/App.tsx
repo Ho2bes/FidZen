@@ -7,6 +7,7 @@ import RegisterPage from './src/components/RegisterPage';
 import HomePage from './src/components/HomePage';
 import TermsContract from './src/components/TermsContract';
 import ProfilePage from './src/components/ProfilePage'; // Import de la page profil
+import FidelityCard from './src/components/FidelityCard'; // Import de la page FidelityCard
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,11 @@ export default function App() {
           name="ProfilePage"
           component={ProfilePage}
           options={{ headerShown: false }} // Masquer le header si nécessaire
+        />
+        <Stack.Screen
+          name="FidelityCardDetails"
+          component={FidelityCard}
+          options={{ headerShown: false }} // Ajout de la page FidelityCard
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -5,7 +5,8 @@ import LinearGradient from 'react-native-linear-gradient';
 export default function FirstPage({ navigation }) {
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.gradient}>
+      {/* Gradient with a more blue-green combination */}
+      <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
         <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
         <Text style={styles.subtitle}>Simplified loyalty personalized reminders</Text>
 
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#00a3cc', // Pour assurer une couleur de fond si le gradient échoue
+    backgroundColor: '#43cea2', // Backup background color in case the gradient fails
   },
   gradient: {
     flex: 1,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonText: {
-    color: '#00a3cc',
+    color: '#43cea2',
     fontSize: 18,
     fontWeight: 'bold',
   },

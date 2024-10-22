@@ -11,17 +11,15 @@ export default function ProfilePage({ navigation }) {
   const [password, setPassword] = useState('*******');
 
   const handleDelete = () => {
-    // Logique de suppression de profil ici
     console.log('Profile Deleted');
   };
 
   const handleSave = () => {
-    // Logique de sauvegarde des modifications
     console.log('Profile updated:', { name, zenSince, lastConnect, email, login, password });
   };
 
   return (
-    <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.gradient}>
+    <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
       <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
 
       {/* Ajout du ScrollView pour le contenu défilant */}
@@ -113,7 +111,7 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: 'white',
     borderRadius: 15,
-    marginTop: 250, // Augmenter le marginTop pour descendre le conteneur
+    marginTop: 250,
     paddingVertical: 20,
     paddingHorizontal: 10,
   },

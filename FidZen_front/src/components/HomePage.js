@@ -16,7 +16,7 @@ export default function HomePage({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={['#00a3cc', '#005f99']} style={styles.gradient}>
+    <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
       {/* En-tête avec le logo et l'icône de profil */}
       <View style={styles.header}>
         <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
@@ -35,7 +35,10 @@ export default function HomePage({ navigation }) {
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={true}>
           {fidelityCards.map((card) => (
             <TouchableOpacity key={card.id} style={styles.card} onPress={() => navigateToCardDetails(card.name)}>
-              <Text style={styles.cardText}>{card.name}</Text>
+              {/* Dégradé de gris pour les cartes */}
+              <LinearGradient colors={['#f5f5f5', '#555555']} style={styles.cardGradient}>
+                <Text style={styles.cardText}>{card.name}</Text>
+              </LinearGradient>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -104,13 +107,14 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   card: {
-    backgroundColor: '#e0f7fa',
+    marginBottom: 15,
+  },
+  cardGradient: {
     padding: 20,
     borderRadius: 15,
-    marginBottom: 15,
-    alignItems: 'center',
     height: 100, // Hauteur ajustée pour ressembler à une carte
     justifyContent: 'center',
+    alignItems: 'center',
   },
   cardText: {
     fontSize: 18,
