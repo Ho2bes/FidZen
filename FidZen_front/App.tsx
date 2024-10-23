@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import LoyaltyCards from './src/components/LoyaltyCards';  // Ton composant des cartes de fidélité
 
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+});*/
 
 
 
@@ -30,14 +30,14 @@ const App = () => {
 export default App;*/
 
 
-/*import React from 'react';
+import React from 'react';
 import Auth from './src/components/Auth'; // Assure-toi que le chemin vers Auth.js est correct
 
 const App = () => {
   return <Auth />;
 };
 
-export default App;*/
+export default App;
 
 /*import React from 'react';
 import User from './src/components/User'; // Remplace Auth par User

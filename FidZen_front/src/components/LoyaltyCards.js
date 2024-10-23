@@ -7,15 +7,21 @@ const LoyaltyCards = () => {
   const [cardNumber, setCardNumber] = useState('');
   const [storeName, setStoreName] = useState('');
   const [image, setImage] = useState(null);
-  const [cards, setCards] = useState([]);
+  const [cards, setCards] = useState([]);  // Initialisation avec un tableau vide
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
         const data = await getAllCards();
-        setCards(data);
+        if (Array.isArray(data)) {
+          setCards(data);  // S'assurer que les données sont bien un tableau
+        } else {
+          setCards([]);  // Si les données ne sont pas un tableau, initialiser avec un tableau vide
+          console.error('Données récupérées ne sont pas un tableau', data);
+        }
       } catch (error) {
         console.error('Erreur lors de la récupération des cartes', error);
+        setCards([]);  // En cas d'erreur, initialiser avec un tableau vide
       }
     };
     fetchCards();
@@ -59,13 +65,17 @@ const LoyaltyCards = () => {
       <Button title="Choisir une image" onPress={pickImage} />
       {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
       <Button title="Ajouter la carte" onPress={handleAddCard} />
-      {cards.map((card) => (
-        <View key={card.id}>
-          <Text>{card.storeName}</Text>
-          <Text>Numéro: {card.cardNumber}</Text>
-          {card.imageUrl && <Image source={{ uri: card.imageUrl }} style={{ width: 200, height: 200 }} />}
-        </View>
-      ))}
+      {Array.isArray(cards) && cards.length > 0 ? (  // Vérifier que `cards` est bien un tableau
+        cards.map((card) => (
+          <View key={card.id}>
+            <Text>{card.storeName}</Text>
+            <Text>Numéro: {card.cardNumber}</Text>
+            {card.imageUrl && <Image source={{ uri: card.imageUrl }} style={{ width: 200, height: 200 }} />}
+          </View>
+        ))
+      ) : (
+        <Text>Aucune carte de fidélité trouvée.</Text>
+      )}
     </ScrollView>
   );
 };

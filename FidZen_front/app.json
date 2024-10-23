@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "FidZen_front",
+    "displayName": "FidZen_front",
     "slug": "FidZen_front",
     "version": "1.0.0",
     "orientation": "portrait",
