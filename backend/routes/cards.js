@@ -1,57 +1,58 @@
-// cards.js
 const express = require('express');
+const multer = require('multer');
+const { PrismaClient } = require('@prisma/client');
+const cloudinary = require('../config/cloudinary'); // Configuration Cloudinary
+
+const prisma = new PrismaClient();
 const router = express.Router();
-const prisma = require('../prisma/prismaclient'); // Utilisation du fichier prismaclient.js
+const upload = multer({ dest: 'uploads/' }); // Stockage temporaire
 
-// Route pour récupérer toutes les cartes de fidélité de l'utilisateur connecté
-router.get('/', async (req, res) => {
+// Route pour ajouter une carte avec image
+router.post('/add', upload.single('image'), async (req, res) => {
   try {
-    const cards = await prisma.loyaltyCard.findMany();
-    res.json(cards);
-  } catch (err) {
-    console.error('Erreur lors de la récupération des cartes de fidélité:', err.message);
-    res.status(500).json({ error: 'Erreur lors de la récupération des cartes de fidélité', details: err.message });
-  }
-});
+    const { cardNumber, storeName, userId } = req.body; // Champs de la carte
+    const file = req.file; // Image envoyée
 
-// Route pour ajouter une nouvelle carte de fidélité
-router.post('/', async (req, res) => {
-  const { cardNumber, storeName, userId } = req.body; // Assurez-vous que userId est inclus dans la requête
+    if (!file) {
+      return res.status(400).json({ message: "Aucune image envoyée" });
+    }
 
-  try {
+    // Envoi de l'image vers Cloudinary
+    const result = await cloudinary.uploader.upload(file.path, { folder: 'cards' });
+    const imageUrl = result.secure_url; // Récupération de l'URL sécurisée de l'image
+
+    // Création de la carte avec Prisma
     const newCard = await prisma.loyaltyCard.create({
       data: {
         cardNumber,
         storeName,
-        user: {
-          connect: { id: userId } // Connecte la carte de fidélité à l'utilisateur existant par son ID
-        },
+        imageUrl,
+        userId,
       },
     });
-    res.status(201).json(newCard);
-  } catch (err) {
-    console.error('Erreur lors de l’ajout de la carte de fidélité:', err.message);
-    res.status(500).json({ error: 'Erreur lors de l’ajout de la carte de fidélité', details: err.message });
+
+    // Réponse de succès
+    res.json({ message: 'Carte ajoutée avec succès', newCard });
+  } catch (error) {
+    console.error('Erreur lors de l’ajout de la carte:', error);
+    res.status(500).json({ message: 'Erreur lors de l’ajout de la carte' });
   }
 });
 
-// **Route pour récupérer une carte par son ID**
-router.get('/:id', async (req, res) => {
-  const { id } = req.params; // Récupère l'ID de la carte depuis les paramètres de l'URL
-
+// Route pour récupérer toutes les cartes d'un utilisateur
+router.get('/:userId', async (req, res) => {
   try {
-    const card = await prisma.loyaltyCard.findUnique({
-      where: { id: id }, // Utilise l'ID dans la requête Prisma
+    const { userId } = req.params;
+
+    // Récupération des cartes utilisateur
+    const cards = await prisma.loyaltyCard.findMany({
+      where: { userId },
     });
 
-    if (!card) {
-      return res.status(404).json({ error: 'Carte non trouvée' });
-    }
-
-    res.json(card);
-  } catch (err) {
-    console.error('Erreur lors de la récupération de la carte de fidélité:', err.message);
-    res.status(500).json({ error: 'Erreur lors de la récupération de la carte de fidélité', details: err.message });
+    res.json(cards);
+  } catch (error) {
+    console.error('Erreur lors de la récupération des cartes:', error);
+    res.status(500).json({ message: 'Erreur lors de la récupération des cartes' });
   }
 });
 

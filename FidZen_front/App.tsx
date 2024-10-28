@@ -1,11 +1,25 @@
 import React from 'react';
+import { SafeAreaView } from 'react-native';
+import LoyaltyCards from './src/components/LoyaltyCards'; // Assure-toi que le chemin est correct
+
+const App = () => {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <LoyaltyCards />
+    </SafeAreaView>
+  );
+};
+
+export default App;
+
+/*import React from 'react';
 import Logs from './src/components/Logs'; // Assure-toi que le chemin est correct
 
 const App = () => {
   return <Logs />;
 };
 
-export default App;
+export default App;*/
 
 
 /*import React from 'react';

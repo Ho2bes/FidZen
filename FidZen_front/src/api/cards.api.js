@@ -1,7 +1,10 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
-const API_URL = 'http://localhost:3000/cards';
+// URL API pour Android ou iOS
+const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api/cards' : 'http://localhost:3000/api/cards';
 
+// Fonction pour récupérer toutes les cartes
 export const getAllCards = async () => {
   try {
     const response = await axios.get(`${API_URL}/`);
@@ -12,12 +15,23 @@ export const getAllCards = async () => {
   }
 };
 
-export const addCard = async (cardNumber, storeName, userId) => {
+// Fonction pour ajouter une carte avec image (nouveau avec gestion image)
+export const addCard = async (cardNumber, storeName, image, userId) => {
+  const data = new FormData();
+  data.append('cardNumber', cardNumber);
+  data.append('storeName', storeName);
+  data.append('userId', userId);
+  data.append('image', {
+    uri: image.uri, // URI de l'image sélectionnée
+    type: image.type || 'image/jpeg',
+    name: image.fileName || 'photo.jpg',
+  });
+
   try {
-    const response = await axios.post(`${API_URL}/`, {
-      cardNumber,
-      storeName,
-      userId,
+    const response = await axios.post(`${API_URL}/add`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
     return response.data;
   } catch (error) {
@@ -26,6 +40,7 @@ export const addCard = async (cardNumber, storeName, userId) => {
   }
 };
 
+// Fonction pour récupérer une carte par ID
 export const getCardById = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/${id}`);

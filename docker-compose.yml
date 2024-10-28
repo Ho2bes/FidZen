@@ -1,61 +1,36 @@
+version: '3.8'
+
 services:
-  postgres:
-    image: postgres:14
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: EL8687NBD8696
-      POSTGRES_DB: postgres
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - DATABASE_URL=postgresql://user:password@postgres:5432/fidzen_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./FidZen_front
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fidzen_db
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - fidzen-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  mongo:
-    image: mongo:6.0.17
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodbdata:/data/db
-    networks:
-      - fidzen-network
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    healthcheck:
-      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongo --quiet"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  backend:
-    build:
-      context: ./backend  # Chemin corrigé vers le dossier backend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      DATABASE_URL: "postgresql://postgres:EL8687NBD8696@postgres:5432/postgres"
-      MONGO_URI: "mongodb://root:rootpassword@mongo:27017/fidzen?authSource=admin"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      mongo:
-        condition: service_healthy
-    networks:
-      - fidzen-network
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
-  mongodbdata:
-
-networks:
-  fidzen-network:
-    driver: bridge
+  postgres_data:

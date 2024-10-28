@@ -1,18 +1,19 @@
-// src/components/LoyaltyCards.js
-import React, { useEffect, useState } from 'react';
-import { View, Button, TextInput, ScrollView, Text } from 'react-native';
-import { addCard, getCards } from '../api/cards.api';
+import React, { useState, useEffect } from 'react';
+import { View, Button, TextInput, ScrollView, Text, Image } from 'react-native';
+import { addCard, getAllCards } from '../api/cards.api'; // Importation des API cards
 
 const LoyaltyCards = () => {
-  const [cardNumber, setCardNumber] = useState('');
-  const [storeName, setStoreName] = useState('');
-  const [cards, setCards] = useState([]);
+  const [cardNumber, setCardNumber] = useState('');  // État pour le numéro de carte
+  const [storeName, setStoreName] = useState('');    // État pour le nom du magasin
+  const [image, setImage] = useState(null);          // État pour stocker l'image sélectionnée
+  const [cards, setCards] = useState([]);            // État pour stocker les cartes récupérées
 
+  // Récupérer toutes les cartes à l'initialisation du composant
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const data = await getCards();
-        setCards(data);
+        const data = await getAllCards();  // Récupérer les cartes via l'API
+        setCards(data);  // Mettre à jour l'état avec les cartes récupérées
       } catch (error) {
         console.error('Erreur lors de la récupération des cartes', error);
       }
@@ -20,12 +21,26 @@ const LoyaltyCards = () => {
     fetchCards();
   }, []);
 
+  // Fonction pour simuler la sélection d'une image via une URL
+  const pickImage = async () => {
+    const imageUrl = "https://plus.unsplash.com/premium_photo-1728488389835-2f9568c5d76a?q=80&w=1895&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";  // URL de test
+    setImage({ uri: imageUrl });  // Simule la sélection d'une image avec une URL
+    console.log("Image sélectionnée :", imageUrl);
+  };
+
+  // Fonction pour ajouter une carte avec les informations de la carte et l'image
   const handleAddCard = async () => {
+    if (!image) {
+      console.error("Aucune image sélectionnée");
+      return;
+    }
+
     try {
-      await addCard({ cardNumber, storeName, userId: '123' });
-      console.log('Carte ajoutée avec succès');
-      setCardNumber('');
+      await addCard(cardNumber, storeName, 'userId123', image.uri);  // Appel API pour ajouter la carte avec l'URL de l'image
+      setCardNumber('');  // Réinitialiser les champs
       setStoreName('');
+      setImage(null);
+      console.log('Carte ajoutée avec succès');
     } catch (error) {
       console.error('Erreur lors de l’ajout de la carte', error);
     }
@@ -33,14 +48,27 @@ const LoyaltyCards = () => {
 
   return (
     <ScrollView>
+      {/* Champ de saisie pour le numéro de carte */}
       <TextInput value={cardNumber} onChangeText={setCardNumber} placeholder="Numéro de carte" />
+
+      {/* Champ de saisie pour le nom du magasin */}
       <TextInput value={storeName} onChangeText={setStoreName} placeholder="Nom du magasin" />
+
+      {/* Bouton pour sélectionner une image */}
+      <Button title="Choisir une image" onPress={pickImage} />
+
+      {/* Affichage de l'image sélectionnée */}
+      {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+
+      {/* Bouton pour ajouter la carte */}
       <Button title="Ajouter la carte" onPress={handleAddCard} />
 
+      {/* Affichage des cartes existantes */}
       {cards.map((card) => (
         <View key={card.id}>
           <Text>{card.storeName}</Text>
           <Text>Numéro: {card.cardNumber}</Text>
+          {card.imageUrl && <Image source={{ uri: card.imageUrl }} style={{ width: 200, height: 200 }} />}
         </View>
       ))}
     </ScrollView>

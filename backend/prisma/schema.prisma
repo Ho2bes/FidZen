@@ -44,6 +44,7 @@ model LoyaltyCard {
   userId     String
   cardNumber String
   storeName  String
+  imageUrl   String?   // Nouveau champ pour stocker l'URL de l'image
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -11,8 +11,10 @@ RUN npm install
 # Copier le reste du code
 COPY . .
 
-# Exposer le port de l'application (à ajuster si besoin)
-EXPOSE 3000
+# Construire l'application pour production
+RUN npm run build
 
-# Commande de démarrage du backend
-CMD ["npm", "start"]
+# Utiliser un serveur léger pour servir les fichiers (par exemple, serve)
+RUN npm install -g serve
+EXPOSE 3001
+CMD ["serve", "-s", "build"]

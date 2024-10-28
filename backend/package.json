@@ -4,8 +4,9 @@
   "description": "fidelity apps",
   "main": "app.js",
   "scripts": {
-    "test": "jest"
-  },
+  "start": "node index.js",
+  "test": "jest"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ho2bes/FidZen.git"
