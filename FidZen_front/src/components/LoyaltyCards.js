@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, TextInput, ScrollView, Text, Image } from 'react-native';
+import { View, Button, TextInput, ScrollView, Text, Image, Alert } from 'react-native';
 import { addCard, getAllCards } from '../api/cards.api'; // Importation des API cards
 
 const LoyaltyCards = () => {
@@ -30,17 +30,21 @@ const LoyaltyCards = () => {
 
   // Fonction pour ajouter une carte avec les informations de la carte et l'image
   const handleAddCard = async () => {
+    console.log('Tentative d’ajout de la carte'); // Vérification de l'appel
     if (!image) {
       console.error("Aucune image sélectionnée");
       return;
     }
 
     try {
-      await addCard(cardNumber, storeName, 'userId123', image.uri);  // Appel API pour ajouter la carte avec l'URL de l'image
+      const response = await addCard(cardNumber, storeName, '714d204a-74a5-424c-a39d-1f3720416f29', image.uri);  // Appel API pour ajouter la carte
       setCardNumber('');  // Réinitialiser les champs
       setStoreName('');
       setImage(null);
-      console.log('Carte ajoutée avec succès');
+      console.log('Carte ajoutée avec succès:', response);
+
+      // Afficher une alerte de confirmation
+      Alert.alert('Succès', 'La carte a été ajoutée avec succès !');
     } catch (error) {
       console.error('Erreur lors de l’ajout de la carte', error);
     }
@@ -48,22 +52,11 @@ const LoyaltyCards = () => {
 
   return (
     <ScrollView>
-      {/* Champ de saisie pour le numéro de carte */}
       <TextInput value={cardNumber} onChangeText={setCardNumber} placeholder="Numéro de carte" />
-
-      {/* Champ de saisie pour le nom du magasin */}
       <TextInput value={storeName} onChangeText={setStoreName} placeholder="Nom du magasin" />
-
-      {/* Bouton pour sélectionner une image */}
       <Button title="Choisir une image" onPress={pickImage} />
-
-      {/* Affichage de l'image sélectionnée */}
       {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
-
-      {/* Bouton pour ajouter la carte */}
       <Button title="Ajouter la carte" onPress={handleAddCard} />
-
-      {/* Affichage des cartes existantes */}
       {cards.map((card) => (
         <View key={card.id}>
           <Text>{card.storeName}</Text>

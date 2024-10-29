@@ -1,37 +1,35 @@
 const express = require('express');
 const multer = require('multer');
 const { PrismaClient } = require('@prisma/client');
-const cloudinary = require('../config/cloudinary'); // Configuration Cloudinary
+const { uploadImage } = require('../config/cloudinary'); // Fonction d'upload de Cloudinary
 
 const prisma = new PrismaClient();
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' }); // Stockage temporaire
+const upload = multer({ dest: 'uploads/' }); // Stockage temporaire des fichiers avant upload
 
 // Route pour ajouter une carte avec image
 router.post('/add', upload.single('image'), async (req, res) => {
   try {
-    const { cardNumber, storeName, userId } = req.body; // Champs de la carte
-    const file = req.file; // Image envoyée
+    const { cardNumber, storeName, userId } = req.body;
+    const file = req.file;
 
     if (!file) {
       return res.status(400).json({ message: "Aucune image envoyée" });
     }
 
     // Envoi de l'image vers Cloudinary
-    const result = await cloudinary.uploader.upload(file.path, { folder: 'cards' });
-    const imageUrl = result.secure_url; // Récupération de l'URL sécurisée de l'image
+    const imageUrl = await uploadImage(file.path);
 
     // Création de la carte avec Prisma
     const newCard = await prisma.loyaltyCard.create({
       data: {
         cardNumber,
         storeName,
-        imageUrl,
+        imageUrl, // Enregistre l'URL de l'image dans la base de données
         userId,
       },
     });
 
-    // Réponse de succès
     res.json({ message: 'Carte ajoutée avec succès', newCard });
   } catch (error) {
     console.error('Erreur lors de l’ajout de la carte:', error);

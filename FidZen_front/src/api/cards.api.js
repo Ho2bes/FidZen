@@ -15,16 +15,16 @@ export const getAllCards = async () => {
   }
 };
 
-// Fonction pour ajouter une carte avec image (nouveau avec gestion image)
-export const addCard = async (cardNumber, storeName, image, userId) => {
+// Fonction pour ajouter une carte avec image (corrigée avec FormData)
+export const addCard = async (cardNumber, storeName, userId, imageUri) => {
   const data = new FormData();
   data.append('cardNumber', cardNumber);
   data.append('storeName', storeName);
   data.append('userId', userId);
   data.append('image', {
-    uri: image.uri, // URI de l'image sélectionnée
-    type: image.type || 'image/jpeg',
-    name: image.fileName || 'photo.jpg',
+    uri: imageUri,
+    type: 'image/jpeg',
+    name: 'photo.jpg',
   });
 
   try {
@@ -35,7 +35,7 @@ export const addCard = async (cardNumber, storeName, image, userId) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Erreur lors de l’ajout de la carte:', error);
+    console.error("Erreur d'ajout de carte:", error.response ? error.response.data : error.message);
     throw error;
   }
 };
