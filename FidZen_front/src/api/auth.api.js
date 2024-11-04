@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 
 // URL API pour Android ou iOS
-const API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:3000/api/auth' : 'http://localhost:3000/api/auth';
+const API_URL = Platform.OS === 'android' ? 'http://10.0.3.2:3000/api/auth' : 'http://10.0.3.2:3000/api/auth';
 
 // Enregistrement (création de compte)
 export const register = async (email, password, name) => {

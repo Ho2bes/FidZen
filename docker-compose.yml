@@ -11,7 +11,8 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
-
+    command: sh -c "npx prisma migrate deploy && npm start"
+    
   frontend:
     build:
       context: ./FidZen_front
