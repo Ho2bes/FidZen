@@ -8,7 +8,7 @@ const User = () => {
   const [name, setName] = useState('');
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(''); // Ajout d'un message pour afficher les résultats
-  const [userId] = useState('e0f36199-dab0-4663-b33b-85a6c19adb97'); // ID de l'utilisateur à gérer
+  const [userId] = useState('44073275-771f-4ddb-9681-b323391a00d9'); // ID de l'utilisateur à gérer
 
   // Fonction pour récupérer un utilisateur existant
   useEffect(() => {

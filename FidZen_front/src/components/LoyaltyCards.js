@@ -37,7 +37,7 @@ const LoyaltyCards = () => {
     }
 
     try {
-      const response = await addCard(cardNumber, storeName, '714d204a-74a5-424c-a39d-1f3720416f29', image.uri);  // Appel API pour ajouter la carte
+      const response = await addCard(cardNumber, storeName, '44073275-771f-4ddb-9681-b323391a00d9', image.uri);  // Appel API pour ajouter la carte
       setCardNumber('');  // Réinitialiser les champs
       setStoreName('');
       setImage(null);

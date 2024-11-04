@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { SafeAreaView } from 'react-native';
 import LoyaltyCards from './src/components/LoyaltyCards'; // Assure-toi que le chemin est correct
 
@@ -10,7 +10,7 @@ const App = () => {
   );
 };
 
-export default App;
+export default App;*/
 
 /*import React from 'react';
 import Logs from './src/components/Logs'; // Assure-toi que le chemin est correct
@@ -31,12 +31,12 @@ const App = () => {
 
 export default App;*/
 
-/*import React from 'react';
+import React from 'react';
 import User from './src/components/User'; // Remplace Auth par User
 
 const App = () => {
   return <User />; // Affiche le composant User
 };
 
-export default App;*/
+export default App;
 

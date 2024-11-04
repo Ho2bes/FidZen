@@ -6,7 +6,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://user:password@postgres:5432/fidzen_db
+      - DATABASE_URL=postgresql://postgres:EL8687NBD8696@postgres:5432/postgres
     ports:
       - "3000:3000"
     depends_on:
@@ -16,6 +16,8 @@ services:
     build:
       context: ./FidZen_front
       dockerfile: Dockerfile
+    environment:
+      - API_URL=http://backend:3000
     ports:
       - "3001:3001"
     depends_on:
@@ -24,11 +26,11 @@ services:
   postgres:
     image: postgres
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: fidzen_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: EL8687NBD8696
+      POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

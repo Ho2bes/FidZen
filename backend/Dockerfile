@@ -11,7 +11,10 @@ RUN npm install
 # Copier le reste du code
 COPY . .
 
-# Exposer le port de l'application (à ajuster si besoin)
+# Copier le fichier .env
+COPY .env .env
+
+# Exposer le port de l'application
 EXPOSE 3000
 
 # Commande de démarrage du backend
