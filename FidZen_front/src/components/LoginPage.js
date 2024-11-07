@@ -21,7 +21,7 @@ export default function LoginPage({ navigation }) {
           {/* Champs de saisie pour Login */}
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Login"
+              placeholder="Email"
               placeholderTextColor="#005f99" // Texte en bleu foncé
               style={styles.input}
               value={login}

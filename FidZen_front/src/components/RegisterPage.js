@@ -28,7 +28,7 @@ export default function RegisterPage({ navigation }) {
           {/* Champs de saisie pour Name */}
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Name"
+              placeholder="Lastname"
               placeholderTextColor="#005f99"
               style={styles.input}
               value={name}
@@ -39,7 +39,7 @@ export default function RegisterPage({ navigation }) {
           {/* Champs de saisie pour Surname */}
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Surname"
+              placeholder="Name"
               placeholderTextColor="#005f99"
               style={styles.input}
               value={surname}
@@ -50,7 +50,7 @@ export default function RegisterPage({ navigation }) {
           {/* Champs de saisie pour Login */}
           <View style={styles.inputContainer}>
             <TextInput
-              placeholder="Login"
+              placeholder="Email"
               placeholderTextColor="#005f99"
               style={styles.input}
               value={login}
