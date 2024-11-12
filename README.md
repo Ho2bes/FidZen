@@ -64,7 +64,8 @@ FidZen is designed for modern consumers managing numerous loyalty cards and want
 	```
 
 4. **Set up Docker environment:**
-   ```docker-compose up -d
+   ```
+   docker-compose up -d
 	```
 
 5. **Database migrations:**
