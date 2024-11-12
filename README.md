@@ -2,7 +2,7 @@
 
 ![FidZen Logo](https://github.com/Ho2bes/FidZen/blob/develop/image/LOGO%20FIDZEN.png)
 
-**FidZen** is a mobile application designed to centralize your loyalty cards and notify you of product recalls related to your purchases. Simplify the management of your loyalty cards, stay informed of product recalls in real-time, and keep all your essential information at your fingertips.
+**FidZen** is a mobile application aimed at simplifying loyalty card management and providing timely notifications for product recalls. With FidZen, users can store all their loyalty cards in one place, receive real-time product recall alerts, and access key information conveniently.
 
 ## Table of Contents
 
@@ -18,38 +18,38 @@
 
 ## About
 
-FidZen is designed for modern consumers who juggle numerous loyalty cards. Our application allows you to centralize all your cards in one place, scan your receipts, and receive notifications in case of a product recall. FidZen ensures you never forget a loyalty card and protects you from recalled products.
+FidZen is designed for modern consumers managing numerous loyalty cards and wanting to stay informed about product recalls that may impact their purchases. By centralizing loyalty cards and notifications, FidZen provides a seamless way to keep track of essential information and ensures users never miss important updates on recalled items.
 
 ## Features
 
-- **Loyalty Card Management**: Easily add, edit, and delete your loyalty cards.
-- **Receipt Scanning**: Scan your receipts and automatically link them to your loyalty cards.
-- **Product Recall Notifications**: Receive real-time alerts if a purchased product is recalled.
-- **Intuitive Interface**: A simple and pleasant interface designed for optimal user experience.
+- **Loyalty Card Management**: Easily add, view, edit, and delete your loyalty cards.
+- **Product Recall Notifications**: Get instant notifications if a purchased product is recalled.
+- **Modern Interface**: A clean and user-friendly design for an intuitive experience.
+- **Secure Account**: Safe storage of your personal and purchase data.
 
 ## Technologies Used
 
-- **Frontend**: Flutter
+- **Frontend**: React Native
 - **Backend**: Node.js with Express
 - **Database**: PostgreSQL with Prisma ORM
-- **Notifications**: Firebase Cloud Messaging (FCM)
-- **Containerization**: Docker
+- **Notifications**: Push notifications via integrated services (initially explored FCM and OneSignal)
+- **Containerization**: Docker (for consistency across development environments)
 
 ## Installation
 
 ### Prerequisites
 
 - Node.js and npm
-- Flutter
 - Docker
 - PostgreSQL
+- React Native CLI (for mobile development)
 
 ### Installation Steps
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo/fidzen.git
-   cd fidzen
+   git clone https://github.com/Ho2bes/FidZen.git
+   cd FidZen
    ```
 
 2. **Install backend dependencies:**
@@ -58,20 +58,18 @@ FidZen is designed for modern consumers who juggle numerous loyalty cards. Our a
 	npm install
    ```
 
-3. **Install frontend dependencies:**
-   ```bash
-   	cd ../frontend
-	flutter pub get
+3. **Install frontend dependencies**
+   ```cd ../FidZen_front
+   npm install
 	```
 
 4. **Set up Docker environment:**
-   ```bash
-   docker-compose up -d
    ```
+   docker-compose up -d
+	```
 
 5. **Database migrations:**
-   ```bash
-   cd backend
+   ```cd backend
    npx prisma migrate dev
    ```
 
@@ -79,28 +77,25 @@ FidZen is designed for modern consumers who juggle numerous loyalty cards. Our a
 
 - **Backend**:
     ```bash
-    npm run start  # from the backend folder
+    npm start  # from the backend folder
     ```
 - **Frontend**:
     ```bash
-    flutter run  # from the frontend folder
+    npx react-native run-android  # for Android emulator or device
     ```
 
 ## Usage
 
-- **Create an Account**: Register with your email address and a secure password.
-- **Add a Loyalty Card**: Add a card through the user interface by filling in the required information.
-- **Scan a Receipt**: Use the scan feature to automatically add purchased products.
-- **Receive Notifications**: Enable notifications to be alerted in case of a product recall.
+Create an Account: Register with your email address and a secure password.
+Add a Loyalty Card: Add a card through the user interface by filling in the required information.
+Enable Notifications: Stay updated on any product recalls.
 
 ## Architecture
 
-FidZen’s architecture follows a layered approach, separating the frontend, backend, and database for optimal management and security.
-
-- **Frontend (Flutter)**: Manages the user interface and user interactions.
-- **Backend (Node.js)**: Manages business logic, REST APIs, and user authentication.
-- **Database (PostgreSQL)**: Stores user information, loyalty cards, and receipts.
-- **Notifications (FCM)**: Sends product recall notifications to users.
+FidZen’s architecture separates the frontend, backend, and database components to ensure scalability and maintainability.
+Frontend (React Native): Handles user interface and interactions.
+Backend (Node.js): Manages business logic, REST APIs, and authentication.
+Database (PostgreSQL): Stores user data, loyalty card details, and other relevant information.
 
 ![Architecture FidZen](https://github.com/Ho2bes/FidZen/blob/develop/image/Architecture%20FidZen.png)
 
