@@ -7,24 +7,27 @@ export default function FidelityCard({ navigation }) {
   const [storeName, setStoreName] = useState('');
 
   const handleTakePhoto = () => {
-    // Logique pour prendre une photo
     console.log('Taking a photo of the card');
   };
 
   const handleAddCard = () => {
-    // Logique pour ajouter la carte
     console.log('Card added:', { cardNumber, storeName });
+  };
+
+  const handleDeleteCard = () => {
+    // Logique pour supprimer la carte
+    console.log('Card deleted:', { cardNumber, storeName });
+    setCardNumber(''); // Réinitialise le numéro de carte
+    setStoreName(''); // Réinitialise le nom du magasin
   };
 
   return (
     <LinearGradient colors={['#43cea2', '#185a9d']} style={styles.gradient}>
-      {/* Logo en haut */}
       <Image source={require('../assets/logo_fidzen.png')} style={styles.logo} />
 
       <View style={styles.container}>
         <Text style={styles.title}>Add Fidelity Card</Text>
 
-        {/* Champ numéro de carte */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Card Number:</Text>
           <TextInput
@@ -36,7 +39,6 @@ export default function FidelityCard({ navigation }) {
           />
         </View>
 
-        {/* Champ nom du magasin */}
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Store Name:</Text>
           <TextInput
@@ -48,14 +50,17 @@ export default function FidelityCard({ navigation }) {
           />
         </View>
 
-        {/* Bouton pour prendre une photo */}
         <TouchableOpacity style={styles.photoButton} onPress={handleTakePhoto}>
           <Text style={styles.photoButtonText}>Take a Picture</Text>
         </TouchableOpacity>
 
-        {/* Bouton pour ajouter la carte */}
         <TouchableOpacity style={styles.addButton} onPress={handleAddCard}>
           <Text style={styles.addButtonText}>Add Card</Text>
+        </TouchableOpacity>
+
+        {/* Bouton pour supprimer la carte */}
+        <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteCard}>
+          <Text style={styles.deleteButtonText}>Delete Card</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -104,13 +109,13 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: '#f0f0f0', // Gris clair pour les champs de saisie
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
     paddingHorizontal: 10,
     color: '#005f99',
   },
   photoButton: {
-    backgroundColor: '#4CAF50', // Couleur verte pour le bouton de photo
+    backgroundColor: '#4CAF50',
     paddingVertical: 15,
     width: '100%',
     borderRadius: 25,
@@ -123,13 +128,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   addButton: {
-    backgroundColor: '#0288d1', // Couleur bleue pour le bouton d'ajout
+    backgroundColor: '#0288d1',
     paddingVertical: 15,
     width: '100%',
     borderRadius: 25,
     alignItems: 'center',
+    marginBottom: 15,
   },
   addButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  deleteButton: {
+    backgroundColor: '#d32f2f', // Couleur rouge pour le bouton de suppression
+    paddingVertical: 15,
+    width: '100%',
+    borderRadius: 25,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  deleteButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
